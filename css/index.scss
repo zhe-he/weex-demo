@@ -1,0 +1,29 @@
+@import "reset";
+
+html,body{
+	background-color: #EFF2F8;
+}
+
+.v-box{
+	width: 100%;
+	margin: 20px auto;
+	text-align: center;
+	background-color: #fff;
+	box-sizing: border-box;
+
+	.thead{
+		background-color: #EFF2F9;
+	}
+	th,& td{
+		width: 25%;
+		border-left: 1px solid #dadfea;
+		border-bottom: 1px solid #dadfea;
+		padding: 6px;
+	}
+	th{
+		border-top: 1px solid #dadfea;
+	}
+}
+.v-echarts{
+	height: 400px;
+}

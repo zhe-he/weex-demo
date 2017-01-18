@@ -1,2 +1,6 @@
 **/.svn
 **/.DS_Store
+node_modules
+**/*.diff
+assets
+tsconfig.json

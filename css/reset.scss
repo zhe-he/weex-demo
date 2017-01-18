@@ -6,13 +6,9 @@
   -webkit-tap-highlight-color: transparent;
 }
 html{
-  -ms-text-size-adjust:100%;
-  -webkit-text-size-adjust:100%;
   text-size-adjust: 100%;
   /*font-size: 20px;*/
-  font-family: sans-serif, Tahoma, Helvetica, "Microsoft Yahei", "微软雅黑", Arial, STHeiti;
-  -moz-user-select: none; 
-  -webkit-user-select: none; 
+  font-family: sans-serif, Tahoma, Helvetica, "Microsoft Yahei", "微软雅黑", Arial, STHeiti; 
   user-select: none; 
 }
 
@@ -29,7 +25,6 @@ input, textarea, select {
   outline: none; 
 }
 input, button, select, textarea {
-  -webkit-appearance: none;
   appearance: none;
   border-radius: 0px; 
 }
@@ -48,10 +43,11 @@ img {
 }
 
 a.a_c{
-  -webkit-transform: scale(1,1);
   transform: scale(1,1);
 }
 a.a_c:active{
-  -webkit-transform: scale(0.95,0.95);
   transform: scale(0.95,0.95);
+}
+[v-cloak]{
+  display: none;
 }
