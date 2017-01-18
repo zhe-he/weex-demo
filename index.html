@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,initial-scale=1.0">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+	<title>图表测试</title>
+	<link rel="stylesheet" type="text/css" href="css/reset.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<script type="text/javascript" src="js/echarts.min.js"></script>
+	<script type="text/javascript" src="js/vue.min.js"></script>
+	
+</head>
+<body>
+	<table border="0" cellspacing="0" cellpadding="0" v-cloak id="v-box" class="v-box">
+		<thead>
+			<tr>
+				<th></th>
+				<th>TRAIN</th>
+				<th>BUS</th>
+				<th>TOTAL</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr v-for="item in today_all">
+				<td v-text="item.type"></td>
+				<td v-text="item.train"></td>
+				<td v-text="item.bus"></td>
+				<td v-text="item.train+item.bus"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div id="v-echarts" class="v-echarts"></div>
+
+	<script type="text/javascript" src="data/test_data.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+</body>
+</html>

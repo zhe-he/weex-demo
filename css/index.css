@@ -1,0 +1,33 @@
+html,body{
+	background-color: #EFF2F8;
+}
+
+.v-box{
+	width: 100%;
+	margin: 20px auto;
+	text-align: center;
+	background-color: #fff;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.v-box thead{
+	background-color: #EFF2F9;
+}
+.v-box th{
+	border-top: 1px solid #dadfea;
+}
+.v-box th,.v-box td{
+	border-left: 1px solid #dadfea;
+	border-bottom: 1px solid #dadfea;
+	padding: 6px;
+}
+.v-box th,
+.v-box td{
+	width: 25%;
+}
+.v-echarts{
+	height: 400px;
+}
+[v-cloak]{
+	display: none;
+}
