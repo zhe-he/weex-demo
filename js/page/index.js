@@ -2,166 +2,141 @@ import "../../css/index.scss";
 
 import Vue from "vue";
 import echarts from "echarts";
+import "babel-polyfill";
+
+const T_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getPortalTrainBusUser.action';
 
 window.addEventListener('DOMContentLoaded',function (){
+    var vEcharts = echarts.init(document.getElementById("v-echarts"));
+
     new Vue({
         el: "#v-box",
         data: {
-            today_all: [
-                {
-                    "type": "real_users",
-                    "train":    5000,
-                    "bus":      300
+            today_detail: {},
+            today_all: []
+        },
+        watch: {
+            today_detail: {
+                handler(val,oldVal){
+                    this.updata_echarts();
                 },
-                {
-                    "type": "connected_users",
-                    "train":    3000,
-                    "bus":      120
-                },
-                {
-                    "type": "active_users",
-                    "train":    800,
-                    "bus":      30
-                }   
-            ]
+                deep: true
+            }
+        },
+        mounted(){
+            this.get();
+            setInterval(this.get.bind(this),60000);
+        },
+        methods: {
+            get(){
+                vEcharts.showLoading();
+                fetch(T_URL)
+                    .then(response=>response.json())
+                    .then(arr=>{
+                        var today_detail = {
+                            x_data: [],         // time
+                            r_user: [],         // real_users
+                            c_user: [],         // connected_users
+                            a_user: []          // active_users
+                        };
+                        var today_all = [
+                            {"type": "real_users","trainUser":0,"busUser":0},
+                            {"type": "connected_users","trainUser":0,"busUser":0},
+                            {"type": "active_users","trainUser":0,"busUser":0}
+                        ];
+                        for(let json of arr){
+                            switch(json.userType){
+                                case 1:
+                                    today_detail.x_data.push(json.timeId);
+                                    today_detail.r_user.push(json.totalUser);
+                                    today_all[0].trainUser+=json.trainUser;
+                                    today_all[0].busUser+=json.busUser;
+                                    break;
+                                case 2:
+                                    today_detail.c_user.push(json.totalUser);
+                                    today_all[1].trainUser+=json.trainUser;
+                                    today_all[1].busUser+=json.busUser;
+                                    break;
+                                case 3:
+                                    today_detail.a_user.push(json.totalUser);
+                                    today_all[2].trainUser+=json.trainUser;
+                                    today_all[2].busUser+=json.busUser;
+                                    break;
+                            }
+                        }
+                        this.today_detail = today_detail;
+                        this.today_all = today_all;
+                    })
+                    .catch((e)=>console.error(`error ${e}`));
+            },
+            updata_echarts: function (){
+                let {x_data,r_user,c_user,a_user} = this.today_detail;
+                var option = {
+                    title : {
+                        text: 'USERS DETAIL',
+                        subtext: ''
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data : x_data,
+                            axisLabel: {
+                                formatter: "{value}h"
+                            }
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value',
+                            axisLabel : {
+                                formatter: '{value}'
+                            }
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'real_all',
+                            type:'line',
+                            data: r_user,
+                            markLine : {
+                                data : [
+                                    {type : 'average', name: 'average'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'connected_all',
+                            type:'line',
+                            data: c_user,
+                            markLine : {
+                                data : [
+                                    {type : 'average', name : 'average'}
+                                ]
+                            }
+                        },
+                        {
+                            name:'active_all',
+                            type:'line',
+                            data: a_user,
+                            markLine : {
+                                data : [
+                                    {type : 'average', name : 'average'}
+                                ]
+                            }
+                        }
+                    ]
+                };
+
+                vEcharts.hideLoading();
+                vEcharts.setOption(option);
+            }
         }
     })
 
 
 },false);
-
-var data_today_detail = [
-    {
-        "now_time": 0,
-        "real_all": 0,
-        "connected_all": 0,
-        "active_all": 0
-    },
-    {
-        "now_time": 3,
-        "real_all": 100,
-        "connected_all": 30,
-        "active_all": 10
-    },
-    {
-        "now_time": 6,
-        "real_all": 200,
-        "connected_all": 50,
-        "active_all": 20
-    },
-    {
-        "now_time": 9,
-        "real_all": 500,
-        "connected_all": 280,
-        "active_all": 140
-    },
-    {
-        "now_time": 12,
-        "real_all": 1200,
-        "connected_all": 600,
-        "active_all": 320
-    },
-    {
-        "now_time": 15,
-        "real_all": 2000,
-        "connected_all": 1400,
-        "active_all": 300
-    },
-    {
-        "now_time": 18,
-        "real_all": 1200,
-        "connected_all": 700,
-        "active_all": 350
-    },
-    {
-        "now_time": 21,
-        "real_all": 300,
-        "connected_all": 130,
-        "active_all": 50
-    },
-    {
-        "now_time": 24,
-        "real_all": 30,
-        "connected_all": 10,
-        "active_all": 3
-    }
-];
-
-
-
-var x_data = [],
-	r_user = [],
-	c_user = [],
-	a_user = [];
-for (var i = 0; i < data_today_detail.length; i++) {
-	x_data[i] = data_today_detail[i].now_time;
-	r_user[i] = data_today_detail[i].real_all;
-	c_user[i] = data_today_detail[i].connected_all;
-	a_user[i] = data_today_detail[i].active_all;
-}
-
-var option = {
-    title : {
-        text: 'USERS DETAIL',
-        subtext: ''
-    },
-    tooltip : {
-        trigger: 'axis'
-    },
-    legend: {
-        data:['最高人次','最低人次']
-    },
-    calculable : true,
-    xAxis : [
-        {
-            type : 'category',
-            boundaryGap : false,
-            data : x_data,
-            axisLabel: {
-            	formatter: "{value}h"
-            }
-        }
-    ],
-    yAxis : [
-        {
-            type : 'value',
-            axisLabel : {
-                formatter: '{value}'
-            }
-        }
-    ],
-    series : [
-        {
-            name:'real_all',
-            type:'line',
-            data: r_user,
-            markLine : {
-                data : [
-                    {type : 'average', name: 'average'}
-                ]
-            }
-        },
-        {
-            name:'connected_all',
-            type:'line',
-            data: c_user,
-            markLine : {
-                data : [
-                    {type : 'average', name : 'average'}
-                ]
-            }
-        },
-        {
-            name:'active_all',
-            type:'line',
-            data: a_user,
-            markLine : {
-                data : [
-                    {type : 'average', name : 'average'}
-                ]
-            }
-        }
-    ]
-};
-
-echarts.init(document.getElementById("v-echarts")).setOption(option);
