@@ -2,6 +2,7 @@ import "../../css/index.scss";
 
 import Vue from "vue";
 import echarts from "echarts";
+import dataFormat from 'dataFormat';
 import "babel-polyfill";
 
 const T_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getPortalTrainBusUser.action';
@@ -9,9 +10,14 @@ const T_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getPortalTrainBu
 window.addEventListener('DOMContentLoaded',function (){
     var vEcharts = echarts.init(document.getElementById("v-echarts"));
 
+    Vue.filter("format_time",function (str){
+        return dataFormat(str,"YYYY-MM-DD hh:mm:ss");
+    });
+
     new Vue({
         el: "#v-box",
         data: {
+            now: Date.now(),
             today_detail: {},
             today_all: []
         },
@@ -24,12 +30,15 @@ window.addEventListener('DOMContentLoaded',function (){
             }
         },
         mounted(){
+            vEcharts.showLoading();
             this.get();
             setInterval(this.get.bind(this),60000);
+            setInterval(()=>{
+                this.now = Date.now();
+            }, 1000);
         },
         methods: {
             get(){
-                vEcharts.showLoading();
                 fetch(T_URL)
                     .then(response=>response.json())
                     .then(arr=>{
