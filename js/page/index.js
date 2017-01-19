@@ -11,7 +11,7 @@ window.addEventListener('DOMContentLoaded',function (){
     var vEcharts = echarts.init(document.getElementById("v-echarts"));
 
     Vue.filter("format_time",function (str){
-        return dataFormat(str,"YYYY-MM-DD hh:mm:ss");
+        return dataFormat(str,"YYYY-MM-DD hh:mm");
     });
 
     new Vue({
@@ -32,10 +32,10 @@ window.addEventListener('DOMContentLoaded',function (){
         mounted(){
             vEcharts.showLoading();
             this.get();
-            setInterval(this.get.bind(this),60000);
             setInterval(()=>{
                 this.now = Date.now();
-            }, 1000);
+                this.get();
+            },60000);
         },
         methods: {
             get(){
@@ -49,9 +49,9 @@ window.addEventListener('DOMContentLoaded',function (){
                             a_user: []          // active_users
                         };
                         var today_all = [
-                            {"type": "real_users","trainUser":0,"busUser":0},
-                            {"type": "connected_users","trainUser":0,"busUser":0},
-                            {"type": "active_users","trainUser":0,"busUser":0}
+                            {"type": "实际用户","trainUser":0,"busUser":0},
+                            {"type": "已连接用户","trainUser":0,"busUser":0},
+                            {"type": "活跃用户","trainUser":0,"busUser":0}
                         ];
                         for (var i = arr.length-3; i < arr.length; i++) {
                             switch(arr[i].userType){
@@ -93,7 +93,7 @@ window.addEventListener('DOMContentLoaded',function (){
                 let {x_data,r_user,c_user,a_user} = this.today_detail;
                 var option = {
                     title : {
-                        text: 'USERS DETAIL',
+                        text: '用户详情',
                         subtext: ''
                     },
                     tooltip : {
@@ -120,32 +120,32 @@ window.addEventListener('DOMContentLoaded',function (){
                     ],
                     series : [
                         {
-                            name:'real_all',
+                            name:'实际用户',
                             type:'line',
                             data: r_user,
                             markLine : {
                                 data : [
-                                    {type : 'average', name: 'average'}
+                                    {type : 'average', name: '平均'}
                                 ]
                             }
                         },
                         {
-                            name:'connected_all',
+                            name:'已连接用户',
                             type:'line',
                             data: c_user,
                             markLine : {
                                 data : [
-                                    {type : 'average', name : 'average'}
+                                    {type : 'average', name : '平均'}
                                 ]
                             }
                         },
                         {
-                            name:'active_all',
+                            name:'活跃用户',
                             type:'line',
                             data: a_user,
                             markLine : {
                                 data : [
-                                    {type : 'average', name : 'average'}
+                                    {type : 'average', name : '平均'}
                                 ]
                             }
                         }
