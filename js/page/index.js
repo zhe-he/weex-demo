@@ -53,23 +53,34 @@ window.addEventListener('DOMContentLoaded',function (){
                             {"type": "connected_users","trainUser":0,"busUser":0},
                             {"type": "active_users","trainUser":0,"busUser":0}
                         ];
+                        for (var i = arr.length-3; i < arr.length; i++) {
+                            switch(arr[i].userType){
+                                case 1: 
+                                    today_all[0].trainUser=arr[i].trainUser;
+                                    today_all[0].busUser=arr[i].busUser;
+                                    break;
+                                case 2: 
+                                    today_all[1].trainUser=arr[i].trainUser;
+                                    today_all[1].busUser=arr[i].busUser;
+                                    break;
+                                case 3: 
+                                    today_all[2].trainUser=arr[i].trainUser;
+                                    today_all[2].busUser=arr[i].busUser;
+                                    break;
+                            }
+                        }
+
                         for(let json of arr){
                             switch(json.userType){
                                 case 1:
                                     today_detail.x_data.push(json.timeId);
-                                    today_detail.r_user.push(json.totalUser);
-                                    today_all[0].trainUser+=json.trainUser;
-                                    today_all[0].busUser+=json.busUser;
+                                    today_detail.r_user.push(json.totalUser);                       
                                     break;
                                 case 2:
                                     today_detail.c_user.push(json.totalUser);
-                                    today_all[1].trainUser+=json.trainUser;
-                                    today_all[1].busUser+=json.busUser;
                                     break;
                                 case 3:
                                     today_detail.a_user.push(json.totalUser);
-                                    today_all[2].trainUser+=json.trainUser;
-                                    today_all[2].busUser+=json.busUser;
                                     break;
                             }
                         }
