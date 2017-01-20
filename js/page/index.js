@@ -6,6 +6,8 @@ import dataFormat from 'dataFormat';
 import "babel-polyfill";
 
 const T_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getPortalTrainBusUser.action';
+const isMobile = /android|webos|ip(hone|ad|od)|opera (mini|mobi|tablet)|iemobile|windows.+(phone|touch)|mobile|fennec|kindle (Fire)|Silk|maemo|blackberry|playbook|bb10\; (touch|kbd)|Symbian(OS)|Ubuntu Touch/i.test(window.navigator.userAgent); 
+
 
 window.addEventListener('DOMContentLoaded',function (){
     var vEcharts = echarts.init(document.getElementById("v-echarts"));
@@ -91,6 +93,7 @@ window.addEventListener('DOMContentLoaded',function (){
             },
             updata_echarts: function (){
                 let {x_data,r_user,c_user,a_user} = this.today_detail;
+                let formatter = isMobile?"":"{value}";
                 var option = {
                     title : {
                         text: '用户详情',
@@ -114,7 +117,7 @@ window.addEventListener('DOMContentLoaded',function (){
                         {
                             type : 'value',
                             axisLabel : {
-                                formatter: '{value}'
+                                formatter: formatter
                             }
                         }
                     ],
@@ -122,32 +125,32 @@ window.addEventListener('DOMContentLoaded',function (){
                         {
                             name:'实际用户',
                             type:'line',
-                            data: r_user,
-                            markLine : {
+                            data: r_user
+                            /*,markLine : {
                                 data : [
                                     {type : 'average', name: '平均'}
                                 ]
-                            }
+                            }*/
                         },
                         {
                             name:'已连接用户',
                             type:'line',
-                            data: c_user,
-                            markLine : {
+                            data: c_user
+                            /*,markLine : {
                                 data : [
                                     {type : 'average', name : '平均'}
                                 ]
-                            }
+                            }*/
                         },
                         {
                             name:'活跃用户',
                             type:'line',
-                            data: a_user,
-                            markLine : {
+                            data: a_user
+                            /*,markLine : {
                                 data : [
                                     {type : 'average', name : '平均'}
                                 ]
-                            }
+                            }*/
                         }
                     ]
                 };
