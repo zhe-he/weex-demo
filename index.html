@@ -8,8 +8,8 @@
     <meta content="telephone=no" name="format-detection">
 	<title>bizdata-dashboard</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/index.css">
-	<link rel="shortcut icon" type="image/ico" href="images/favicon.ico" />
-	<link href="images/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed">
+	<link rel="shortcut icon" type="image/ico" href="http://api.test.amol.com.cn/favicon.ico" />
+	<link href="http://api.test.amol.com.cn/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed">
 	<script type="text/javascript" src="assets/js/common.js"></script>
 </head>
 <body>
@@ -21,6 +21,7 @@
 					<th></th>
 					<th>火车</th>
 					<th>大巴</th>
+					<th>一体机</th>
 					<th>总计</th>
 				</tr>
 			</thead>
@@ -29,12 +30,19 @@
 					<td v-text="item.type"></td>
 					<td v-text="item.trainUser"></td>
 					<td v-text="item.busUser"></td>
-					<td v-text="item.trainUser+item.busUser"></td>
+					<td v-text="item.ytjUser"></td>
+					<td v-text="item.trainUser+item.ytjUser+item.busUser"></td>
 				</tr>
 			</tbody>
 		</table>
 	</article>
 	<div id="v-echarts" class="v-echarts"></div>
+	<footer class="v-explain">
+		<p>实际用户　: 已看见自弹页的用户</p>
+		<p>已连接用户: 已经进入首页的用户</p>
+		<p>活跃用户　: 已有用户行为的用户</p>
+		<p>设备安装数: 已经安装的设备数量</p>
+	</footer>
 	
 
 	<script type="text/javascript" src="assets/js/index.js"></script>

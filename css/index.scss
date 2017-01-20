@@ -1,6 +1,7 @@
 @import "reset";
 
 html,body{
+	overflow-x: hidden;
 	background-color: #EFF2F8;
 }
 
@@ -15,7 +16,7 @@ html,body{
 		background-color: #EFF2F9;
 	}
 	th,& td{
-		width: 25%;
+		width: 20%;
 		border-left: 1px solid #dadfea;
 		border-bottom: 1px solid #dadfea;
 		padding: 6px;
@@ -30,4 +31,8 @@ html,body{
 .v-time{
 	padding: 10px;
 	display: block;
+}
+.v-explain{
+	line-height: 24px;
+	text-indent: 10px;
 }
