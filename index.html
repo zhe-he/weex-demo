@@ -37,7 +37,7 @@
 			</tbody>
 		</table>
 		<div id="v-echarts" class="v-echarts"></div>
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt0">
+		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
 			<thead>
 				<tr>
 					<th></th>
@@ -57,7 +57,24 @@
 				</tr>
 			</tbody>
 		</table>
-
+		<table border="0" cellspacing="0" cellpadding="0" class="v-box v-box2 mt10">
+			<thead>
+				<tr>
+					<th></th>
+					<th>今天下载量</th>
+					<th>昨天下载量</th>
+					<th>总计</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="item in user_all">
+					<td v-text="item.type"></td>
+					<td v-text="item.dailyUser"></td>
+					<td v-text="item.yesterday"></td>
+					<td v-text="item.totalUser"></td>
+				</tr>
+			</tbody>
+		</table>
 
 		<footer class="v-explain">
 			<p>实际用户　: 已看见自弹页的用户</p>

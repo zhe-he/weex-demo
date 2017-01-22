@@ -35,15 +35,15 @@ module.exports = {
 	module: {
 		// jshint,代码优化时打开
 		preLoaders: [
-			/*{
+			{
 				test: /\.js$/,
 				loader: 'jshint',
 				exclude: /node_modules|lib/        
-			}*/
+			}
 	    ],
 		loaders: [
 			{test: /\.html$/,exclude:/node_modules/,loader: 'pug'},
-			{test: /\.js$/,exclude:/(node_modules|bower_components)/,loader:'babel',query: {presets:['es2015']}},
+			{test: /\.js$/,exclude:/(node_modules|bower_components|lib)/,loader:'babel',query: {presets:['es2015']}},
 			{test: /\.tsx?$/,exclude:/(node_modules)/,loader:'ts'},
 			{test: /\.css$/,exclude:/node_modules/,loader: ExtractTextPlugin.extract('style', 'css!postcss')},
 			{test: /\.(scss|sass)$/,exclude:/node_modules/,loader: ExtractTextPlugin.extract('style', 'css!postcss!sass')},
