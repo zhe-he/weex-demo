@@ -17,13 +17,13 @@ html,body{
 	.thead{
 		background-color: #EFF2F9;
 	}
-	th,& td{
+	th,td{
 		width: 20%;
 		border-left: 1px solid #dadfea;
 		border-bottom: 1px solid #dadfea;
 		padding: 6px;
 	}
-	th{
+	thead > tr:first-child > th{
 		border-top: 1px solid #dadfea;
 	}
 }
@@ -38,6 +38,7 @@ html,body{
 	display: block;
 }
 .v-explain{
+	padding-bottom: 10px;
 	line-height: 24px;
 	text-indent: 10px;
 }

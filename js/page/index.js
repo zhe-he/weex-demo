@@ -5,6 +5,7 @@ import echarts from "echarts";
 import dataFormat from 'dataFormat';
 import "babel-polyfill";
 
+const Y_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/queryBIbizTDeviceUserDaily.action';
 const T_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getPortalTrainBusUser.action';
 const D_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getTrainBusYtjDevNum.action';
 const U_URL = 'http://139.217.9.12:8080/stats/users/daily';
@@ -18,7 +19,7 @@ window.addEventListener('DOMContentLoaded',function (){
         return dataFormat(str,"YYYY-MM-DD hh:mm");
     });
     Vue.filter("number",function (n){
-        return (n/10000).toFixed(1) + 'W';
+        return n>10000?(n/10000).toFixed(1) + 'W':n;
     });
     Vue.filter("minute",function (n){
         return (n/60).toFixed(1) + 'min';
@@ -29,6 +30,7 @@ window.addEventListener('DOMContentLoaded',function (){
         data: {
             now: Date.now(),
             today_detail: {},
+            yesterday_all: [],
             today_all: [],
             device_all: [],
             user_all: []
@@ -70,9 +72,25 @@ window.addEventListener('DOMContentLoaded',function (){
         methods: {
             countAmp(name){
                 if (this.user_all.length==0) {return ""}
-                return (this.user_all[1][name]/this.user_all[2][name]*100).toFixed(1)+'%';
+                return ((this.user_all[1][name]-this.user_all[2][name])/this.user_all[2][name]*100).toFixed(2)+'%';
             },
             get(){
+                fetch(Y_URL)
+                    .then(response=>response.json())
+                    .then(arr=>{
+                        var yesterday_all = [{"type":"实际用户"},{"type":"已连接用户"},{"type":"活跃用户"}];
+                        arr.sort((a,b)=>a.userType-b.userType);
+                        for (var i = 0; i < arr.length; i++) {
+                            yesterday_all[i].trainUser = arr[i].trainUser - 0;
+                            yesterday_all[i].busUser = arr[i].busUser - 0;
+                            yesterday_all[i].ytjUser = arr[i].ytjUser - 0;
+                        }
+                        this.yesterday_all = yesterday_all;
+
+                    })
+                    .catch((e)=>{
+                        console.error(`error ${e}`)
+                    });
                 fetch(T_URL)
                     .then(response=>response.json())
                     .then(arr=>{
@@ -83,27 +101,27 @@ window.addEventListener('DOMContentLoaded',function (){
                             a_user: []         // active_users
                         };
                         var today_all = [
-                            {"type":"实际用户","trainUser":0,"busUser":0,"ytjUser":0},
-                            {"type":"已连接用户","trainUser":0,"busUser":0,"ytjUser":0},
-                            {"type":"活跃用户","trainUser":0,"busUser":0,"ytjUser":0}
+                            {"type":"实际用户"},
+                            {"type":"已连接用户"},
+                            {"type":"活跃用户"}
                         ];
-                        var iNow = arr.length;
-                        for (var i = iNow-3; i < iNow; i++) {
+
+                        for (var i = 0; i < arr.length; i++) {
                             switch(arr[i].userType){
                                 case 1: 
-                                    today_all[0].trainUser=arr[i].trainUser;
-                                    today_all[0].busUser=arr[i].busUser;
-                                    today_all[0].ytjUser=arr[i].ytjUser;
+                                    today_all[0].trainUser=arr[i].trainUser - 0;
+                                    today_all[0].busUser=arr[i].busUser - 0;
+                                    today_all[0].ytjUser=arr[i].ytjUser - 0;
                                     break;
                                 case 2: 
-                                    today_all[1].trainUser=arr[i].trainUser;
-                                    today_all[1].busUser=arr[i].busUser;
-                                    today_all[1].ytjUser=arr[i].ytjUser;
+                                    today_all[1].trainUser=arr[i].trainUser - 0;
+                                    today_all[1].busUser=arr[i].busUser - 0;
+                                    today_all[1].ytjUser=arr[i].ytjUser - 0;
                                     break;
                                 case 3: 
-                                    today_all[2].trainUser=arr[i].trainUser;
-                                    today_all[2].busUser=arr[i].busUser;
-                                    today_all[2].ytjUser=arr[i].ytjUser;
+                                    today_all[2].trainUser=arr[i].trainUser - 0;
+                                    today_all[2].busUser=arr[i].busUser - 0;
+                                    today_all[2].ytjUser=arr[i].ytjUser - 0;
                                     break;
                             }
                         }
@@ -135,29 +153,25 @@ window.addEventListener('DOMContentLoaded',function (){
                 fetch(D_URL)
                     .then(response=>response.json())
                     .then(arr=>{
-                        var device_all = [];
+                        var device_all = [{"type": "设备活跃数"},{"type": "设备安装数"}];
 
-                        // 只取最后一条数据
-                        for (var i = arr.length-3; i < arr.length; i+=3) {
-                            var json = {
-                                "type": "设备安装数",
-                                "statDate": arr[i].statDate,
-                                "statHour": arr[i].statHour
-                            };
+                        for (var i = 0; i < arr.length; i+=3) {
                             for (var j = 0; j < 3; j++) {
                                 switch(arr[i+j].carType){
                                     case 1:
-                                        json.trainUser = arr[i+j].sumOnline;
+                                        device_all[0].trainUser = arr[i+j].sumTodayActive;
+                                        device_all[1].trainUser = arr[i+j].sumOnline;
                                         break;
                                     case 2:
-                                        json.busUser = arr[i+j].sumOnline;
+                                        device_all[0].busUser = arr[i+j].sumTodayActive;
+                                        device_all[1].busUser = arr[i+j].sumOnline;
                                         break;
                                     case 11:
-                                        json.ytjUser = arr[i+j].sumOnline;
+                                        device_all[0].ytjUser = arr[i+j].sumTodayActive;
+                                        device_all[1].ytjUser = arr[i+j].sumOnline;
                                         break;
                                 }
                             }
-                            device_all.push(json);
                         }
                         this.device_all = device_all;
                     })

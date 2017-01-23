@@ -13,11 +13,35 @@
 	<script type="text/javascript" src="assets/js/common.js"></script>
 </head>
 <body>
-
+<!--Portal昨日数据统计-->
 	<article v-cloak id="v-box">
 		<time class="v-time">当前时间: {{now | format_time}}</time>
+
+		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
+			<thead>
+				<tr><th colspan="5">Portal昨日数据统计</th></tr>
+				<tr>
+					<th></th>
+					<th>火车</th>
+					<th>大巴</th>
+					<th>一体机</th>
+					<th>总计</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="item in yesterday_all">
+					<td v-text="item.type"></td>
+					<td>{{item.trainUser|number}}</td>
+					<td>{{item.busUser|number}}</td>
+					<td>{{item.ytjUser|number}}</td>
+					<td>{{item.trainUser+item.ytjUser+item.busUser|number}}</td>
+				</tr>
+			</tbody>
+		</table>
+
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box">
 			<thead>
+				<tr><th colspan="5">Portal小时数据统计</th></tr>
 				<tr>
 					<th></th>
 					<th>火车</th>
@@ -39,6 +63,7 @@
 		<div id="v-echarts" class="v-echarts"></div>
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
 			<thead>
+				<tr><th colspan="5">设备安装统计</th></tr>
 				<tr>
 					<th></th>
 					<th>火车</th>
@@ -59,6 +84,7 @@
 		</table>
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
 			<thead>
+				<tr><th colspan="5">往返应用统计表</th></tr>
 				<tr>
 					<th></th>
 					<th>新增用户</th>
