@@ -7,7 +7,7 @@ import "babel-polyfill";
 
 const T_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getPortalTrainBusUser.action';
 const D_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getTrainBusYtjDevNum.action';
-const U_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/queryBIBizTAppUserToday.action';
+const U_URL = 'http://139.217.9.12:8080/stats/users/daily';
 const isMobile = /android|webos|ip(hone|ad|od)|opera (mini|mobi|tablet)|iemobile|windows.+(phone|touch)|mobile|fennec|kindle (Fire)|Silk|maemo|blackberry|playbook|bb10\; (touch|kbd)|Symbian(OS)|Ubuntu Touch/i.test(window.navigator.userAgent); 
 
 
@@ -16,6 +16,12 @@ window.addEventListener('DOMContentLoaded',function (){
 
     Vue.filter("format_time",function (str){
         return dataFormat(str,"YYYY-MM-DD hh:mm");
+    });
+    Vue.filter("number",function (n){
+        return (n/10000).toFixed(1) + 'W';
+    });
+    Vue.filter("minute",function (n){
+        return (n/60).toFixed(1) + 'min';
     });
 
     new Vue({
@@ -35,6 +41,20 @@ window.addEventListener('DOMContentLoaded',function (){
                 deep: true
             }
         },
+        computed: {
+            newAmp(){
+                return this.countAmp("new");
+            },
+            activeAmp(){
+                return this.countAmp("active");
+            },
+            totalAmp(){
+                return this.countAmp("total");
+            },
+            durationAmp(){
+                return this.countAmp("duration");
+            }
+        },
         mounted(){
             this.$nextTick(()=>{
                 vEcharts = echarts.init(document.getElementById("v-echarts"))
@@ -48,6 +68,10 @@ window.addEventListener('DOMContentLoaded',function (){
             },60000);
         },
         methods: {
+            countAmp(name){
+                if (this.user_all.length==0) {return ""}
+                return (this.user_all[1][name]/this.user_all[2][name]*100).toFixed(1)+'%';
+            },
             get(){
                 fetch(T_URL)
                     .then(response=>response.json())
@@ -143,39 +167,31 @@ window.addEventListener('DOMContentLoaded',function (){
                 fetch(U_URL)
                     .then(response=>response.json())
                     .then(arr=>{
-                        var user_all = [{"type":"下载用户"},{"type":"新用户"},{"type":"活跃用户"}];
-                        for(var json of arr){
-                            switch(json.userType){
-                                case "1":
-                                    user_all[0].dailyUser = json.dailyUser;
-                                    user_all[0].totalUser = json.totalUser;
-                                    break;
-                                case "1_1":
-                                    user_all[0].yesterday = json.dailyUser;
-                                    break;
-                                case "2":
-                                    user_all[1].dailyUser = json.dailyUser;
-                                    user_all[1].totalUser = '/';
-                                    break;
-                                case "2_1":
-                                    user_all[1].yesterday = json.dailyUser;
-                                    break;
-                                case "3":
-                                    user_all[2].dailyUser = json.dailyUser;
-                                    user_all[2].totalUser = json.totalUser;
-                                    break;
-                                case "3_1":
-                                    user_all[2].yesterday = json.dailyUser;
-                                    break;
-                            }
+                        var data = arr.result.data;
+                        var user_all = [];
+                        for(let name in data){
+                            let json = Object.assign({date:name},data[name]);
+                            user_all.push(json);
                         }
-                        this.user_all = user_all;
+                        this.user_all = user_all.sort((a,b)=>this.format2Time(b.date)-this.format2Time(a.date)).slice(0,3);
                     })
                     .catch((e)=>{
                         console.error(`error ${e}`)
                     })
             },
-            updata_echarts: function (){
+            format2Time(time){
+                var y = time.substr(0,4),
+                    M = time.substr(5,2)-1,
+                    d = time.substr(8,2),
+                    h = time.substr(11,2) || 0,
+                    m = time.substr(14,2) || 0,
+                    s = time.substr(17,2) || 0;
+                var nowDate = new Date();
+                nowDate.setFullYear(y,M,d);
+                nowDate.setHours(h,m,s);
+                return nowDate.getTime();
+            },
+            updata_echarts(){
                 let {x_data,r_user,c_user,a_user} = this.today_detail;
                 let formatter = isMobile?"":"{value}";
                 var option = {

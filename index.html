@@ -57,21 +57,30 @@
 				</tr>
 			</tbody>
 		</table>
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box v-box2 mt10">
+		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
 			<thead>
 				<tr>
 					<th></th>
-					<th>今天下载量</th>
-					<th>昨天下载量</th>
-					<th>总计</th>
+					<th>新增用户</th>
+					<th>活跃用户</th>
+					<th>用户总数</th>
+					<th>使用时长</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in user_all">
-					<td v-text="item.type"></td>
-					<td v-text="item.dailyUser"></td>
-					<td v-text="item.yesterday"></td>
-					<td v-text="item.totalUser"></td>
+				<tr v-for="items in user_all">
+					<td v-text="items.date"></td>
+					<td>{{items.new|number}}</td>
+					<td>{{items.active|number}}</td>
+					<td>{{items.total|number}}</td>
+					<td>{{items.duration|minute}}</td>
+				</tr>
+				<tr>
+					<td>增幅</td>
+					<td>{{newAmp}}</td>
+					<td>{{activeAmp}}</td>
+					<td>{{totalAmp}}</td>
+					<td>{{durationAmp}}</td>
 				</tr>
 			</tbody>
 		</table>
