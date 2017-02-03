@@ -153,22 +153,25 @@ window.addEventListener('DOMContentLoaded',function (){
                 fetch(D_URL)
                     .then(response=>response.json())
                     .then(arr=>{
-                        var device_all = [{"type": "设备活跃数"},{"type": "设备安装数"}];
+                        var device_all = [{"type": "设备活跃数"},{"type": "设备在线数"},{"type": "设备安装数"}];
 
                         for (var i = 0; i < arr.length; i+=3) {
                             for (var j = 0; j < 3; j++) {
                                 switch(arr[i+j].carType){
                                     case 1:
                                         device_all[0].trainUser = arr[i+j].sumTodayActive;
-                                        device_all[1].trainUser = arr[i+j].sumOnline;
+                                        device_all[1].trainUser = arr[i+j].sumTodayOnline;
+                                        device_all[2].trainUser = arr[i+j].sumOnline;
                                         break;
                                     case 2:
                                         device_all[0].busUser = arr[i+j].sumTodayActive;
-                                        device_all[1].busUser = arr[i+j].sumOnline;
+                                        device_all[1].busUser = arr[i+j].sumTodayOnline;
+                                        device_all[2].busUser = arr[i+j].sumOnline;
                                         break;
                                     case 11:
                                         device_all[0].ytjUser = arr[i+j].sumTodayActive;
-                                        device_all[1].ytjUser = arr[i+j].sumOnline;
+                                        device_all[1].ytjUser = arr[i+j].sumTodayOnline;
+                                        device_all[2].ytjUser = arr[i+j].sumOnline;
                                         break;
                                 }
                             }

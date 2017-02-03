@@ -17,28 +17,6 @@
 	<article v-cloak id="v-box">
 		<time class="v-time">当前时间: {{now | format_time}}</time>
 
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
-			<thead>
-				<tr><th colspan="5">Portal昨日数据统计</th></tr>
-				<tr>
-					<th></th>
-					<th>火车</th>
-					<th>大巴</th>
-					<th>一体机</th>
-					<th>总计</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="item in yesterday_all">
-					<td v-text="item.type"></td>
-					<td>{{item.trainUser|number}}</td>
-					<td>{{item.busUser|number}}</td>
-					<td>{{item.ytjUser|number}}</td>
-					<td>{{item.trainUser+item.ytjUser+item.busUser|number}}</td>
-				</tr>
-			</tbody>
-		</table>
-
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box">
 			<thead>
 				<tr><th colspan="5">Portal小时数据统计</th></tr>
@@ -60,7 +38,31 @@
 				</tr>
 			</tbody>
 		</table>
+
 		<div id="v-echarts" class="v-echarts"></div>
+
+		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
+			<thead>
+			<tr><th colspan="5">Portal昨日数据统计</th></tr>
+			<tr>
+				<th></th>
+				<th>火车</th>
+				<th>大巴</th>
+				<th>一体机</th>
+				<th>总计</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr v-for="item in yesterday_all">
+				<td v-text="item.type"></td>
+				<td>{{item.trainUser|number}}</td>
+				<td>{{item.busUser|number}}</td>
+				<td>{{item.ytjUser|number}}</td>
+				<td>{{item.trainUser+item.ytjUser+item.busUser|number}}</td>
+			</tr>
+			</tbody>
+		</table>
+
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
 			<thead>
 				<tr><th colspan="5">设备安装统计</th></tr>
@@ -115,7 +117,9 @@
 			<p>实际用户　: 已看见自弹页的用户</p>
 			<p>已连接用户: 已经进入首页的用户</p>
 			<p>活跃用户　: 已有用户行为的用户</p>
-			<p>设备安装数: 已经安装的设备数量</p>
+			<p>设备活跃数: 今天有用户连接的设备数量</p>
+			<p>设备在线数: 今天有上电联网的设备数量</p>
+			<p>设备安装数: 截至今天已安装的设备数量</p>
 		</footer>
 	</article>
 
