@@ -210,7 +210,7 @@ window.addEventListener('DOMContentLoaded',function (){
             },
             updata_echarts(){
                 let {x_data,r_user,c_user,a_user} = this.today_detail;
-                let formatter = isMobile?"":"{value}";
+                //let formatter = isMobile?"{value}":"{value}";
                 var option = {
                     title : {
                         text: '用户详情',
@@ -234,7 +234,13 @@ window.addEventListener('DOMContentLoaded',function (){
                         {
                             type : 'value',
                             axisLabel : {
-                                formatter: formatter
+                                formatter: function (value){
+                                    if(isMobile){
+                                        return value/10000+"万";
+                                    }else {
+                                        return value;
+                                    }
+                                }
                             }
                         }
                     ],
