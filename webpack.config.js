@@ -35,11 +35,11 @@ module.exports = {
 	module: {
 		// jshint,代码优化时打开
 		preLoaders: [
-			{
+			/*{
 				test: /\.js$/,
 				loader: 'jshint',
 				exclude: /node_modules|lib/        
-			}
+			}*/
 	    ],
 		loaders: [
 			{test: /\.html$/,exclude:/node_modules/,loader: 'pug'},

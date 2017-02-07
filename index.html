@@ -13,24 +13,25 @@
 	<script type="text/javascript" src="assets/js/common.js"></script>
 </head>
 <body>
-<!--Portal昨日数据统计-->
 	<article v-cloak id="v-box">
-		<time class="v-time">当前时间: {{now | format_time}}</time>
+		<time class="v-time">{{ $t("vtime") }}: {{now | format_time}}</time>
 
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box">
 			<thead>
-				<tr><th colspan="5">Portal小时数据统计</th></tr>
+				<tr><th colspan="5">{{ $t("Portal.hourly") }}</th></tr>
 				<tr>
 					<th></th>
-					<th>火车</th>
-					<th>大巴</th>
-					<th>一体机</th>
-					<th>总计</th>
+					<th>{{ $t("Portal.train") }}</th>
+					<th>{{ $t("Portal.bus") }}</th>
+					<th>{{ $t("Portal.ytj") }}</th>
+					<th>{{ $t("Portal.total") }}</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in today_all">
-					<td v-text="item.type"></td>
+				<tr v-for="(item,index) in today_all">
+					<td v-if="index==0">{{ $t("Portal.actual") }}</td>
+					<td v-if="index==1">{{ $t("Portal.connect") }}</td>
+					<td v-if="index==2">{{ $t("Portal.active") }}</td>
 					<td v-text="item.trainUser"></td>
 					<td v-text="item.busUser"></td>
 					<td v-text="item.ytjUser"></td>
@@ -43,18 +44,20 @@
 
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
 			<thead>
-			<tr><th colspan="5">Portal昨日数据统计</th></tr>
+			<tr><th colspan="5">{{ $t("Portal.yesterday") }}</th></tr>
 			<tr>
 				<th></th>
-				<th>火车</th>
-				<th>大巴</th>
-				<th>一体机</th>
-				<th>总计</th>
+				<th>{{ $t("Portal.train") }}</th>
+				<th>{{ $t("Portal.bus") }}</th>
+				<th>{{ $t("Portal.ytj") }}</th>
+				<th>{{ $t("Portal.total") }}</th>
 			</tr>
 			</thead>
 			<tbody>
-			<tr v-for="item in yesterday_all">
-				<td v-text="item.type"></td>
+			<tr v-for="(item,index) in yesterday_all">
+				<td v-if="index==0">{{ $t("Portal.actual") }}</td>
+				<td v-if="index==1">{{ $t("Portal.connect") }}</td>
+				<td v-if="index==2">{{ $t("Portal.active") }}</td>
 				<td>{{item.trainUser|number}}</td>
 				<td>{{item.busUser|number}}</td>
 				<td>{{item.ytjUser|number}}</td>
@@ -65,18 +68,20 @@
 
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
 			<thead>
-				<tr><th colspan="5">设备安装统计</th></tr>
+				<tr><th colspan="5">{{ $t("equip.title") }}</th></tr>
 				<tr>
 					<th></th>
-					<th>火车</th>
-					<th>大巴</th>
-					<th>一体机</th>
-					<th>总计</th>
+					<th>{{ $t("Portal.train") }}</th>
+					<th>{{ $t("Portal.bus") }}</th>
+					<th>{{ $t("Portal.ytj") }}</th>
+					<th>{{ $t("Portal.total") }}</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="item in device_all">
-					<td v-text="item.type"></td>
+				<tr v-for="(item,index) in device_all">
+					<td v-if="index==0">{{ $t("equip.active") }}</td>
+					<td v-if="index==1">{{ $t("equip.online") }}</td>
+					<td v-if="index==2">{{ $t("equip.install") }}</td>
 					<td v-text="item.trainUser"></td>
 					<td v-text="item.busUser"></td>
 					<td v-text="item.ytjUser"></td>
@@ -86,13 +91,13 @@
 		</table>
 		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
 			<thead>
-				<tr><th colspan="5">往返应用统计表</th></tr>
+				<tr><th colspan="5">{{ $t("wangfan.application") }}</th></tr>
 				<tr>
 					<th></th>
-					<th>新增用户</th>
-					<th>活跃用户</th>
-					<th>用户总数</th>
-					<th>使用时长</th>
+					<th>{{ $t("wangfan.newU") }}</th>
+					<th>{{ $t("wangfan.active") }}</th>
+					<th>{{ $t("wangfan.total") }}</th>
+					<th>{{ $t("wangfan.duration") }}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -104,7 +109,7 @@
 					<td>{{items.duration|minute}}</td>
 				</tr>
 				<tr>
-					<td>增幅</td>
+					<td>{{ $t("wangfan.increase") }}</td>
 					<td>{{newAmp}}</td>
 					<td>{{activeAmp}}</td>
 					<td>{{totalAmp}}</td>
@@ -114,14 +119,33 @@
 		</table>
 
 		<footer class="v-explain">
-			<p>实际用户　: 已看见自弹页的用户</p>
-			<p>已连接用户: 已经进入首页的用户</p>
-			<p>活跃用户　: 已有用户行为的用户</p>
-			<p>设备活跃数: 今天有用户连接的设备数量</p>
-			<p>设备在线数: 今天有上电联网的设备数量</p>
-			<p>设备安装数: 截至今天已安装的设备数量</p>
+			<p>{{ $t("explain[0]") }}</p>
+			<p>{{ $t("explain[1]") }}</p>
+			<p>{{ $t("explain[2]") }}</p>
+			<p>{{ $t("explain[3]") }}</p>
+			<p>{{ $t("explain[4]") }}</p>
+			<p>{{ $t("explain[5]") }}</p>
 		</footer>
+		
+		<div class="v-language clearfix">
+			<div class="select-lang">
+				<a @click="showLanguage=!showLanguage" href="javascript:;">
+					{{ $t("language") }}<span class="caret"></span>
+				</a>
+				<ul :class="showLanguage?'show':''">
+					<li>
+						<a @click="lang('en')" href="javascript:;">English</a>
+					</li>
+					<li>
+						<a @click="lang('cn')" href="javascript:;">中文</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
 	</article>
+
+	
 
 	<script type="text/javascript" src="assets/js/index.js"></script>
 </body>

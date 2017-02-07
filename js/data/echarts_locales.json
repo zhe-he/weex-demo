@@ -1,0 +1,14 @@
+{
+    "cn": {
+        "e_title": 	"用户详情",
+        "e_actual": 	"实际用户",
+        "e_connect": 	"连接用户",
+        "e_active": 	"活跃用户"
+    },
+    "en": {
+        "e_title": 		"User Details",
+        "e_actual": 	"Actual User",
+        "e_connect": 	"Connect User",
+        "e_active": 	"Active Users"
+    }
+}

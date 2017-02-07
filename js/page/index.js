@@ -1,6 +1,7 @@
 import "../../css/index.scss";
 
 import Vue from "vue";
+import VueI18n from "vue-i18n";
 import echarts from "echarts";
 import dataFormat from 'dataFormat';
 import "babel-polyfill";
@@ -11,10 +12,18 @@ const D_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getTrainBusYtjDe
 const U_URL = 'http://139.217.9.12:8080/stats/users/daily';
 const isMobile = /android|webos|ip(hone|ad|od)|opera (mini|mobi|tablet)|iemobile|windows.+(phone|touch)|mobile|fennec|kindle (Fire)|Silk|maemo|blackberry|playbook|bb10\; (touch|kbd)|Symbian(OS)|Ubuntu Touch/i.test(window.navigator.userAgent); 
 
+import locales from "../data/locales.json";
+import e_locales from "../data/echarts_locales.json";
+
+Vue.use(VueI18n);
+Vue.config.lang  = 'cn';
+
+Object.keys(locales).forEach(function (lang) {
+    Vue.locale(lang, locales[lang])
+})
 
 window.addEventListener('DOMContentLoaded',function (){
     var vEcharts;
-
     Vue.filter("format_time",function (str){
         return dataFormat(str,"YYYY-MM-DD hh:mm");
     });
@@ -28,6 +37,7 @@ window.addEventListener('DOMContentLoaded',function (){
     new Vue({
         el: "#v-box",
         data: {
+            showLanguage: false,
             now: Date.now(),
             today_detail: {},
             yesterday_all: [],
@@ -78,7 +88,7 @@ window.addEventListener('DOMContentLoaded',function (){
                 fetch(Y_URL)
                     .then(response=>response.json())
                     .then(arr=>{
-                        var yesterday_all = [{"type":"实际用户"},{"type":"已连接用户"},{"type":"活跃用户"}];
+                        var yesterday_all = [{},{},{}];
                         arr.sort((a,b)=>a.userType-b.userType);
                         for (var i = 0; i < arr.length; i++) {
                             yesterday_all[i].trainUser = arr[i].trainUser - 0;
@@ -100,11 +110,7 @@ window.addEventListener('DOMContentLoaded',function (){
                             c_user: [],         // connected_users
                             a_user: []         // active_users
                         };
-                        var today_all = [
-                            {"type":"实际用户"},
-                            {"type":"已连接用户"},
-                            {"type":"活跃用户"}
-                        ];
+                        var today_all = [{},{},{}];
 
                         for (var i = 0; i < arr.length; i++) {
                             switch(arr[i].userType){
@@ -153,8 +159,7 @@ window.addEventListener('DOMContentLoaded',function (){
                 fetch(D_URL)
                     .then(response=>response.json())
                     .then(arr=>{
-                        var device_all = [{"type": "设备活跃数"},{"type": "设备在线数"},{"type": "设备安装数"}];
-
+                        var device_all = [{},{},{}];
                         for (var i = 0; i < arr.length; i+=3) {
                             for (var j = 0; j < 3; j++) {
                                 switch(arr[i+j].carType){
@@ -209,11 +214,12 @@ window.addEventListener('DOMContentLoaded',function (){
                 return nowDate.getTime();
             },
             updata_echarts(){
+                let {e_title,e_actual,e_connect,e_active} = e_locales[Vue.config.lang];
+
                 let {x_data,r_user,c_user,a_user} = this.today_detail;
-                //let formatter = isMobile?"{value}":"{value}";
                 var option = {
                     title : {
-                        text: '用户详情',
+                        text: e_title,
                         subtext: ''
                     },
                     tooltip : {
@@ -236,7 +242,7 @@ window.addEventListener('DOMContentLoaded',function (){
                             axisLabel : {
                                 formatter: function (value){
                                     if(isMobile){
-                                        return value/10000+"万";
+                                        return value/10000+"W";
                                     }else {
                                         return value;
                                     }
@@ -246,40 +252,30 @@ window.addEventListener('DOMContentLoaded',function (){
                     ],
                     series : [
                         {
-                            name:'实际用户',
-                            type:'line',
+                            name: e_actual,
+                            type: 'line',
                             data: r_user
-                            /*,markLine : {
-                                data : [
-                                    {type : 'average', name: '平均'}
-                                ]
-                            }*/
                         },
                         {
-                            name:'已连接用户',
-                            type:'line',
+                            name: e_connect,
+                            type: 'line',
                             data: c_user
-                            /*,markLine : {
-                                data : [
-                                    {type : 'average', name : '平均'}
-                                ]
-                            }*/
                         },
                         {
-                            name:'活跃用户',
-                            type:'line',
+                            name: e_active,
+                            type: 'line',
                             data: a_user
-                            /*,markLine : {
-                                data : [
-                                    {type : 'average', name : '平均'}
-                                ]
-                            }*/
                         }
                     ]
                 };
 
                 vEcharts.hideLoading();
                 vEcharts.setOption(option);
+            },
+            lang(language){
+                this.showLanguage = false;
+                Vue.config.lang = language;
+                this.updata_echarts();
             }
         }
     })

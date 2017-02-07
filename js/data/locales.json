@@ -1,0 +1,76 @@
+{
+    "cn": {
+        "vtime": "当前时间",
+        "Portal": {
+            "hourly":       "Portal小时数据统计",
+            "yesterday":    "Portal昨日数据统计",
+            "train":        "火车",
+            "bus":          "大巴",
+            "ytj":          "一体机",
+            "total":        "总计",
+            "actual":       "实际用户",
+            "connect":      "已连接用户",
+            "active":       "活跃用户"
+        },
+        "equip": {
+            "title":        "设备安装统计",
+            "active":       "设备活跃数",
+            "online":       "设备在线数",
+            "install":      "设备安装数"
+        },
+        "wangfan": {
+            "application": "往返应用统计表",
+            "newU": "新增用户",
+            "active": "活跃用户",
+            "total": "用户总数",
+            "duration": "使用时长",
+            "increase": "增幅"
+        },
+        "explain": [
+            "实际用户　: 已看见自弹页的用户",
+            "已连接用户: 已经进入首页的用户",
+            "活跃用户　: 已有用户行为的用户",
+            "设备活跃数: 今天有用户连接的设备数量",
+            "设备在线数: 今天有上电联网的设备数量",
+            "设备安装数: 截至今天已安装的设备数量"
+        ],
+        "language": "语言"
+    },
+    "en": {
+        "vtime": "current time",
+        "Portal": {
+            "hourly":        "Portal of hourly data statistics",
+            "yesterday":    "Portal yesterday's data statistics",
+            "train":        "train",
+            "bus":          "Bus",
+            "ytj":          "YTJ",
+            "total":        "Total",
+            "actual":       "Actual User",
+            "connect":      "Connect User",
+            "active":       "Active Users"
+        },
+        "equip": {
+            "title":        "Equipment installation statistics",
+            "active":       "Device Active",
+            "online":       "Equipment Online",
+            "install":      "Equipment Installation"
+        },
+        "wangfan": {
+            "application": "Wangfan Application Statistics",
+            "newU": "New Users",
+            "active": "Active Users",
+            "total": "Total",
+            "duration": "Duration",
+            "increase": "Increase"
+        },
+        "explain": [
+            "Actual User: Users who have seen the page",
+            "Connect User: Users who have entered the home page",
+            "Active Users: User behavior",
+            "Device Active: Today there is a number of devices connected to the user",
+            "Equipment Online: Today, the number of equipment connected to the network",
+            "Equipment Installation: Number of devices installed as of today"
+        ],
+        "language": "Language"
+    }
+}
