@@ -9,18 +9,18 @@ import "babel-polyfill";
 const Y_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/queryBIbizTDeviceUserDaily.action';
 const T_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getPortalTrainBusUser.action';
 const D_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/getTrainBusYtjDevNum.action';
-const U_URL = 'http://139.217.9.12:8080/stats/users/daily';
+const U_URL = 'http://139.217.23.179:8080/metrics/talkingdata/users/daily';
 const isMobile = /android|webos|ip(hone|ad|od)|opera (mini|mobi|tablet)|iemobile|windows.+(phone|touch)|mobile|fennec|kindle (Fire)|Silk|maemo|blackberry|playbook|bb10\; (touch|kbd)|Symbian(OS)|Ubuntu Touch/i.test(window.navigator.userAgent); 
 
 import locales from "../data/locales.json";
 import e_locales from "../data/echarts_locales.json";
 
 Vue.use(VueI18n);
-Vue.config.lang  = 'cn';
+Vue.config.lang  = window.localStorage.getItem('language')||'cn';
 
 Object.keys(locales).forEach(function (lang) {
-    Vue.locale(lang, locales[lang])
-})
+    Vue.locale(lang, locales[lang]);
+});
 
 window.addEventListener('DOMContentLoaded',function (){
     var vEcharts;
@@ -135,7 +135,7 @@ window.addEventListener('DOMContentLoaded',function (){
                         const LAST_DAY = dataFormat(Date.now()-1000*3600*24,"YYYYMMDD");
                         for(let json of arr){
                             if (json.dayId==LAST_DAY) {
-                                json.timeId = '昨'+json.timeId;
+                                json.timeId = '\u6628'+json.timeId;
                             }
                             switch(json.userType){
                                 case 1:
@@ -217,6 +217,9 @@ window.addEventListener('DOMContentLoaded',function (){
                 let {e_title,e_actual,e_connect,e_active} = e_locales[Vue.config.lang];
 
                 let {x_data,r_user,c_user,a_user} = this.today_detail;
+                for (var i = 0; i < x_data.length; i++) {
+                    x_data[i] = Vue.config.lang=="en"?x_data[i].replace("\u6628","Y"):x_data[i].replace("Y","\u6628");
+                }
                 var option = {
                     title : {
                         text: e_title,
@@ -274,6 +277,7 @@ window.addEventListener('DOMContentLoaded',function (){
             },
             lang(language){
                 this.showLanguage = false;
+                window.localStorage.setItem('language',language);
                 Vue.config.lang = language;
                 this.updata_echarts();
             }

@@ -1,6 +1,6 @@
 {
   "name": "bizdata-dashboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This guy is too lazy to leave anything",
   "scripts": {
     "start": "webpack --progress --colors",
