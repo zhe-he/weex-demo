@@ -1,7 +1,8 @@
-**/.svn
-**/.DS_Store
+.svn
+.DS_Store
 node_modules
-**/*.diff
-assets
+*.diff
+/assets
 tsconfig.json
-**/*.zip
+*.zip
+/dmc-webpage
