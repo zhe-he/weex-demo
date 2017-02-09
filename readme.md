@@ -23,6 +23,13 @@
 -新增页面，页面中js请放在js/page目录下，文件名默认和css文件名相同。
 	 
 
+###仓库地址	
+origin  git@git.ihangmei.com:H5-web/bizdata-dashboard.git 	
+测试环境地址  ssh://wmr@42.159.29.181:65022/opt/repo/beta.git 	
+预上线地址   ssh://nginx@139.217.17.36:65022/opt/source/php_stg_h5.repo 	
+生产环境地址  ssh://nginx@42.159.26.226:65022/opt/source/php_h5.repo 
+
+
 ###项目介绍：	
 1. *css、images、js目录为开发目录，assets为输出目录*    
 1. 	
