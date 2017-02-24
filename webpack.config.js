@@ -1,80 +1,151 @@
-const webpack = require("webpack");
-const CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin"); // 独立样式
 const fs = require('fs');
 const path = require('path');
-
 const autoprefixer = require('autoprefixer');
-// const pluginsText = new Date().toUTCString() + '\n\r * built by `zhe-he`';
 
-const ASSETS = 'assets'; // 输出目录名
-var commonJs = ['whatwg-fetch','js/lib/fastclick.js'];
-module.exports = {
-	// 页面入口文件配置
-	entry: {
-		"index": commonJs.concat(['js/page/index.js'])
-	},
-	// 入口文件输出配置
-	output: {
-		publicPath: `../../${ASSETS}/`,
-		path: path.resolve(__dirname, ASSETS),
-		filename: 'js/[name].js' //[chunkhash]
-	},
-	// 插件项
-	plugins: [
-		new CommonsChunkPlugin({
-			name: "common",
-			minChunks: 3
-		}),
-		new ExtractTextPlugin('/css/[name].css'), 	// 独立样式
-		new CopyWebpackPlugin([
-			{from: 'images/tmp/**/*'}
-		])
-	],
-	module: {
-		// jshint,代码优化时打开
-		preLoaders: [
-			/*{
-				test: /\.js$/,
-				loader: 'jshint',
-				exclude: /node_modules|lib/        
-			}*/
-	    ],
-		loaders: [
-			{test: /\.html$/,exclude:/node_modules/,loader: 'pug'},
-			{test: /\.js$/,exclude:/(node_modules|bower_components|lib)/,loader:'babel',query: {presets:['es2015']}},
-			{test: /\.tsx?$/,exclude:/(node_modules)/,loader:'ts'},
-			{test: /\.css$/,exclude:/node_modules/,loader: ExtractTextPlugin.extract('style', 'css!postcss')},
-			{test: /\.(scss|sass)$/,exclude:/node_modules/,loader: ExtractTextPlugin.extract('style', 'css!postcss!sass')},
-			{test: /\.less$/,exclude:/node_modules/,loader: ExtractTextPlugin.extract('style', 'css!postcss!less')},
-			{test: /\.vue$/,exclude:/node_modules/,loader: 'vue'},
-			{test: /\.(json|data)$/,exclude:/node_modules/,loader: 'json'},
-			{test: /\.(txt|md)$/,exclude:/node_modules/,loader: 'raw'},
-			{test: /\.(png|jpe?g|gif|ttf)$/,exclude:/node_modules/,loader: 'url?limit=8192&name=[path][name].[ext]?[hash]'}
-		]
-	},
-	jshint: {
-		"freeze": true, // 禁止覆盖本地对象
-		"-W041": false,    // 忽略 === 与 == 的区别
-		// "loopfunc": true, // 允许循环中使用函数
-		"asi": true, 	// 允许省略行尾分号
-		"esversion": 6, // 支持es6语法规则
-		"elision": true, // 支持[1,,,3]
-		"unused": true, // 警告未使用的定义对象
-		"expr": true, 	// 可以使用表达式,某些[奇淫技巧]
-		"lastsemic": true // 最后的分号可以省略
-		// more see -> http://www.jshint.com/docs/options/
-	},
-	postcss: [ autoprefixer({ browsers: ['last 9 versions'], cascade: false }) ],
-	// 其他配置
-	resolve: {
-		root: process.cwd(),
-		extensions: ['', '.js', '.vue'],
-		alias: {
-			"vue": 				"js/lib/vue.common.js",
-			"echarts": 			"js/lib/echarts.common.js",
-			"dataFormat": 		"js/modules/dataFormat.js",
+
+const bannerPlugin = new webpack.BannerPlugin(
+	{ raw: true,banner: '// { "framework": "Vue" }\n' }
+);
+const ASSETS = 'dist'; // 输出目录名
+var commonJs = ['whatwg-fetch'];
+commonJs = [];
+var loaders = [
+	{loader: 'style-loader'},
+	{loader: 'css-loader'},
+	{
+		loader: 'postcss-loader',
+		options: {
+			plugins: [
+				autoprefixer({ browsers: ['last 9 versions'], cascade: false })
+			]
 		}
 	}
-};
+];
+function getBaseConfig () {
+	return {
+		entry: {
+			app: commonJs.concat(['./app.js']),
+		},
+		output: {
+			// publicPath: '',
+			path: path.resolve(__dirname, ASSETS),
+		},
+		plugins: [
+			bannerPlugin,
+			new CopyWebpackPlugin([
+				{from: 'images/tmp/**/*'}
+			]),
+			/*new webpack.optimize.UglifyJsPlugin({
+				compressor: {
+					warnings: false
+				}
+			}),*/
+		],
+		module: {
+			rules: [
+				{
+					test: /\.vue(\?[^?]+)?$/,
+					exclude:/node_modules/,
+					use: [
+						{
+							loader: '',
+							options: {
+								loaders: {
+									'js': 'babel-loader?presets[]=es2015',
+								}
+							}
+						}
+					]
+				},
+				// jshint,代码优化时打开
+				/*{
+					test: /\.js$/,
+					exclude:/(node_modules|lib)/,
+					use: [
+						{
+							loader: "jshint-loader", 
+							options: { 
+								"freeze": true, // 禁止覆盖本地对象
+								"-W041": false,    // 忽略 === 与 == 的区别
+								// "loopfunc": true, // 允许循环中使用函数
+								"asi": true,  // 允许省略行尾分号
+								"esversion": 6, // 支持es6语法规则
+								"elision": true, // 支持[1,,,3]
+								"unused": true, // 警告未使用的定义对象
+								"expr": true,   // 可以使用表达式,某些[奇淫技巧]
+								"lastsemic": true // 最后的分号可以省略
+								// more see -> http://www.jshint.com/docs/options/
+							}
+						}
+					],
+					enforce: 'pre'
+				},*/
+				{test: /\.html$/,exclude:/node_modules/,use: ['pug-loader']},
+				{
+					test: /\.js$/,
+					exclude:/(node_modules|lib)/,
+					use: [
+						{
+							loader:'babel-loader',
+							options: {presets: [["es2015", { "modules": false }]]}
+						}
+					]
+				},
+				{test: /\.tsx?$/,exclude:/(node_modules)/,use:['ts-loader']},
+				{
+					test: /\.css$/,
+					exclude:/node_modules/,
+					use: loaders
+				},
+				{
+					test: /\.(scss|sass)$/,
+					exclude:/node_modules/,
+					use: loaders.concat({loader: 'sass-loader'})
+				},
+				{
+					test: /\.less$/,
+					exclude:/node_modules/,
+					use: loaders.concat({loader: 'less-loader'})
+				},
+				{test: /\.(json|data)$/,exclude:/node_modules/,use: ['json-loader']},
+				{test: /\.(txt|md)$/,exclude:/node_modules/,use: ['raw-loader']},
+				{
+					test: /\.(png|jpe?g|gif|ttf)$/,
+					exclude:/node_modules/,
+					use: [
+						{
+							loader:'url-loader',
+							options: {
+								limit: 8192,
+								name: '[path][name].[ext]?[hash]'
+							}
+						}
+					]
+				}
+			]
+		},
+		// 其他配置
+		resolve: {
+			modules: [
+				process.cwd(),
+				"node_modules"
+			],
+			extensions: ['.js', '.vue'],
+			alias: {
+				"dataFormat":     "src/modules/dataFormat.js",
+			}
+		}
+	}
+}
+
+var webConfig = getBaseConfig()
+webConfig.output.filename = '[name].web.js'
+webConfig.module.rules[0].use[0].loader = 'vue-loader';
+
+var weexConfig = getBaseConfig()
+weexConfig.output.filename = '[name].weex.js'
+weexConfig.module.rules[0].use[0].loader = 'weex-loader';
+
+module.exports = [webConfig, weexConfig]

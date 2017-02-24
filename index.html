@@ -1,152 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,initial-scale=1.0">
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="black" name="apple-mobile-web-app-status-bar-style">
-    <meta content="telephone=no" name="format-detection">
-	<title>bizdata-dashboard</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/index.css">
-	<link rel="shortcut icon" type="image/ico" href="http://api.test.amol.com.cn/favicon.ico" />
-	<link href="http://api.test.amol.com.cn/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed">
-	<script type="text/javascript" src="assets/js/common.js"></script>
+  <meta charset="utf-8">
+  <title>Weex Preview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="format-detection" content="telephone=no, email=no">
+  <link rel="stylesheet" href="./assets/style.css">
+  <script src="./config.js"></script>
+  <script src="./assets/url.js"></script>
+  <script src="./assets/qrcode.js"></script>
+  <script src="./node_modules/vue/dist/vue.js"></script>
 </head>
 <body>
-	<article v-cloak id="v-box">
-		<time class="v-time">{{ $t("vtime") }}: {{now | format_time}}</time>
-
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box">
-			<thead>
-				<tr><th colspan="5">{{ $t("Portal.hourly") }}</th></tr>
-				<tr>
-					<th></th>
-					<th>{{ $t("Portal.train") }}</th>
-					<th>{{ $t("Portal.bus") }}</th>
-					<th>{{ $t("Portal.ytj") }}</th>
-					<th>{{ $t("Portal.total") }}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="(item,index) in today_all">
-					<td v-if="index==0">{{ $t("Portal.actual") }}</td>
-					<td v-if="index==1">{{ $t("Portal.connect") }}</td>
-					<td v-if="index==2">{{ $t("Portal.active") }}</td>
-					<td v-text="item.trainUser"></td>
-					<td v-text="item.busUser"></td>
-					<td v-text="item.ytjUser"></td>
-					<td v-text="item.trainUser+item.ytjUser+item.busUser"></td>
-				</tr>
-			</tbody>
-		</table>
-
-		<div id="v-echarts" class="v-echarts"></div>
-
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
-			<thead>
-			<tr><th colspan="5">{{ $t("Portal.yesterday") }}</th></tr>
-			<tr>
-				<th></th>
-				<th>{{ $t("Portal.train") }}</th>
-				<th>{{ $t("Portal.bus") }}</th>
-				<th>{{ $t("Portal.ytj") }}</th>
-				<th>{{ $t("Portal.total") }}</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr v-for="(item,index) in yesterday_all">
-				<td v-if="index==0">{{ $t("Portal.actual") }}</td>
-				<td v-if="index==1">{{ $t("Portal.connect") }}</td>
-				<td v-if="index==2">{{ $t("Portal.active") }}</td>
-				<td>{{item.trainUser|number}}</td>
-				<td>{{item.busUser|number}}</td>
-				<td>{{item.ytjUser|number}}</td>
-				<td>{{item.trainUser+item.ytjUser+item.busUser|number}}</td>
-			</tr>
-			</tbody>
-		</table>
-
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
-			<thead>
-				<tr><th colspan="5">{{ $t("equip.title") }}</th></tr>
-				<tr>
-					<th></th>
-					<th>{{ $t("Portal.train") }}</th>
-					<th>{{ $t("Portal.bus") }}</th>
-					<th>{{ $t("Portal.ytj") }}</th>
-					<th>{{ $t("Portal.total") }}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="(item,index) in device_all">
-					<td v-if="index==0">{{ $t("equip.active") }}</td>
-					<td v-if="index==1">{{ $t("equip.online") }}</td>
-					<td v-if="index==2">{{ $t("equip.install") }}</td>
-					<td v-text="item.trainUser"></td>
-					<td v-text="item.busUser"></td>
-					<td v-text="item.ytjUser"></td>
-					<td v-text="item.trainUser+item.ytjUser+item.busUser"></td>
-				</tr>
-			</tbody>
-		</table>
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
-			<thead>
-				<tr><th colspan="5">{{ $t("wangfan.application") }}</th></tr>
-				<tr>
-					<th></th>
-					<th>{{ $t("wangfan.newU") }}</th>
-					<th>{{ $t("wangfan.active") }}</th>
-					<th>{{ $t("wangfan.total") }}</th>
-					<th>{{ $t("wangfan.duration") }}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="items in user_all">
-					<td v-text="items.date"></td>
-					<td>{{items.new|number}}</td>
-					<td>{{items.active|number}}</td>
-					<td>{{items.total|number}}</td>
-					<td>{{items.duration|minute}}</td>
-				</tr>
-				<tr>
-					<td>{{ $t("wangfan.increase") }}</td>
-					<td>{{newAmp}}</td>
-					<td>{{activeAmp}}</td>
-					<td>{{totalAmp}}</td>
-					<td>{{durationAmp}}</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<footer class="v-explain">
-			<p>{{ $t("explain[0]") }}</p>
-			<p>{{ $t("explain[1]") }}</p>
-			<p>{{ $t("explain[2]") }}</p>
-			<p>{{ $t("explain[3]") }}</p>
-			<p>{{ $t("explain[4]") }}</p>
-			<p>{{ $t("explain[5]") }}</p>
-		</footer>
-		
-		<div class="v-language clearfix">
-			<div class="select-lang">
-				<a @click="showLanguage=!showLanguage" href="javascript:;">
-					{{ $t("language") }}<span class="caret"></span>
-				</a>
-				<ul :class="showLanguage?'show':''">
-					<li>
-						<a @click="lang('en')" href="javascript:;">English</a>
-					</li>
-					<li>
-						<a @click="lang('cn')" href="javascript:;">中文</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-		
-	</article>
-
-	
-
-	<script type="text/javascript" src="assets/js/index.js"></script>
+  <h1>Weex Preview</h1>
+  <div id="app"></div>
+  <template id="app-template">
+    <div id="app">
+      <div class="mock-phone">
+        <div class="inner">
+          <iframe id="preview" src="./weex.html"></iframe>
+        </div>
+        <div class="camera"></div>
+        <div class="earpiece"></div>
+        <div class="home-btn"></div>
+      </div>
+      <div id="qrcode">
+        <h2>QRCode</h2>
+        <a :href="val" target="_blank"><canvas ref="canvas" width="200" height="200"></canvas></a>
+        <p class="bundle-url"><a :href="val" target="_blank">{{val}}</a></p>
+      </div>
+    </div>
+  </template>
+  <script>
+    console.log('QR CODE URL: ' + url)
+    new Vue({
+      el: '#app',
+      template: '#app-template',
+      data: { val: url },
+      mounted: function () {
+        var qrcodedraw = new QRCodeLib.QRCodeDraw()
+        qrcodedraw.draw(this.$refs.canvas, this.val, function () {})
+      }
+    })
+  </script>
 </body>
 </html>

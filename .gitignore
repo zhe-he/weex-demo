@@ -1,8 +1,8 @@
-.svn
-.DS_Store
 node_modules
-*.diff
-/assets
-tsconfig.json
+dist
+config.js
+*.log
 *.zip
-/dmc-webpage
+.DS_Store
+.svn
+*.diff
