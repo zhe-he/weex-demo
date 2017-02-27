@@ -2,246 +2,159 @@
 	<article>
 		<time class="v-time">{{ $t("vtime") }}: {{now | format_time}}</time>
 
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box">
-			<thead>
-				<tr><th colspan="5">{{ $t("Portal.hourly") }}</th></tr>
-				<tr>
-					<th></th>
-					<th>{{ $t("Portal.train") }}</th>
-					<th>{{ $t("Portal.bus") }}</th>
-					<th>{{ $t("Portal.ytj") }}</th>
-					<th>{{ $t("Portal.total") }}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="(item,index) in today_all" :key="index">
-					<td v-if="index==0">{{ $t("Portal.actual") }}</td>
-					<td v-if="index==1">{{ $t("Portal.connect") }}</td>
-					<td v-if="index==2">{{ $t("Portal.active") }}</td>
-					<td v-text="item.trainUser"></td>
-					<td v-text="item.busUser"></td>
-					<td v-text="item.ytjUser"></td>
-					<td v-text="item.trainUser+item.ytjUser+item.busUser"></td>
-				</tr>
-			</tbody>
-		</table>
-
-
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
-			<thead>
-			<tr><th colspan="5">{{ $t("Portal.yesterday") }}</th></tr>
-			<tr>
-				<th></th>
-				<th>{{ $t("Portal.train") }}</th>
-				<th>{{ $t("Portal.bus") }}</th>
-				<th>{{ $t("Portal.ytj") }}</th>
-				<th>{{ $t("Portal.total") }}</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr v-for="(item,index) in yesterday_all" :key="index">
-				<td v-if="index==0">{{ $t("Portal.actual") }}</td>
-				<td v-if="index==1">{{ $t("Portal.connect") }}</td>
-				<td v-if="index==2">{{ $t("Portal.active") }}</td>
-				<td>{{item.trainUser|number}}</td>
-				<td>{{item.busUser|number}}</td>
-				<td>{{item.ytjUser|number}}</td>
-				<td>{{item.trainUser+item.ytjUser+item.busUser|number}}</td>
-			</tr>
-			</tbody>
-		</table>
-
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
-			<thead>
-				<tr><th colspan="5">{{ $t("equip.title") }}</th></tr>
-				<tr>
-					<th></th>
-					<th>{{ $t("Portal.train") }}</th>
-					<th>{{ $t("Portal.bus") }}</th>
-					<th>{{ $t("Portal.ytj") }}</th>
-					<th>{{ $t("Portal.total") }}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="(item,index) in device_all" :key="index">
-					<td v-if="index==0">{{ $t("equip.active") }}</td>
-					<td v-if="index==1">{{ $t("equip.online") }}</td>
-					<td v-if="index==2">{{ $t("equip.install") }}</td>
-					<td v-text="item.trainUser"></td>
-					<td v-text="item.busUser"></td>
-					<td v-text="item.ytjUser"></td>
-					<td v-text="item.trainUser+item.ytjUser+item.busUser"></td>
-				</tr>
-			</tbody>
-		</table>
-		<table border="0" cellspacing="0" cellpadding="0" class="v-box mt10">
-			<thead>
-				<tr><th colspan="5">{{ $t("wangfan.application") }}</th></tr>
-				<tr>
-					<th></th>
-					<th>{{ $t("wangfan.newU") }}</th>
-					<th>{{ $t("wangfan.active") }}</th>
-					<th>{{ $t("wangfan.total") }}</th>
-					<th>{{ $t("wangfan.duration") }}</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="(items,index) in user_all" :key="index">
-					<td v-text="items.date"></td>
-					<td>{{items.new|number}}</td>
-					<td>{{items.active|number}}</td>
-					<td>{{items.total|number}}</td>
-					<td>{{items.duration|minute}}</td>
-				</tr>
-				<tr>
-					<td>{{ $t("wangfan.increase") }}</td>
-					<td>{{newAmp}}</td>
-					<td>{{activeAmp}}</td>
-					<td>{{totalAmp}}</td>
-					<td>{{durationAmp}}</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<footer class="v-explain">
-			<p>{{ $t("explain[0]") }}</p>
-			<p>{{ $t("explain[1]") }}</p>
-			<p>{{ $t("explain[2]") }}</p>
-			<p>{{ $t("explain[3]") }}</p>
-			<p>{{ $t("explain[4]") }}</p>
-			<p>{{ $t("explain[5]") }}</p>
-		</footer>
-		
-		<div class="v-language clearfix">
-			<div class="select-lang">
-				<a @click="showLanguage=!showLanguage" href="javascript:;">
-					{{ $t("language") }}<span class="caret"></span>
-				</a>
-				<ul :class="showLanguage?'show':''">
-					<li>
-						<a @click="lang('en')" href="javascript:;">English</a>
-					</li>
-					<li>
-						<a @click="lang('cn')" href="javascript:;">中文</a>
-					</li>
-				</ul>
+		<div class="mt10">
+			<h2 class="title">{{ $t("Portal.hourly") }}</h2>
+			<div class="row">
+				<div class="item"><text></text></div>
+				<div class="item"><text>{{ $t("Portal.train") }}</text></div>
+				<div class="item"><text>{{ $t("Portal.bus") }}</text></div>
+				<div class="item"><text>{{ $t("Portal.ytj") }}</text></div>
+				<div class="item"><text>{{ $t("Portal.total") }}</text></div>
+			</div>
+			<div v-for="(item,index) in today_all" :key="index" class="row">
+				<div class="item">
+					<text v-if="index==0">{{ $t("Portal.actual") }}</text>
+					<text v-if="index==1">{{ $t("Portal.connect") }}</text>
+					<text v-if="index==2">{{ $t("Portal.active") }}</text>
+				</div>
+				<div class="item"><text>{{item.trainUser}}</text></div>
+				<div class="item"><text>{{item.busUser}}</text></div>
+				<div class="item"><text>{{item.ytjUser}}</text></div>
+				<div class="item"><text>{{item.trainUser+item.ytjUser+item.busUser}}</text></div>
 			</div>
 		</div>
-		
+
+        <div class="mt10">
+            <h2 class="title">{{ $t("Portal.yesterday") }}</h2>
+            <div class="row">
+                <div class="item"><text></text></div>
+                <div class="item"><text>{{ $t("Portal.train") }}</text></div>
+                <div class="item"><text>{{ $t("Portal.bus") }}</text></div>
+                <div class="item"><text>{{ $t("Portal.ytj") }}</text></div>
+                <div class="item"><text>{{ $t("Portal.total") }}</text></div>
+            </div>
+            <div v-for="(item,index) in yesterday_all" :key="index" class="row">
+                <div class="item">
+                    <text v-if="index==0">{{ $t("Portal.actual") }}</text>
+                    <text v-if="index==1">{{ $t("Portal.connect") }}</text>
+                    <text v-if="index==2">{{ $t("Portal.active") }}</text>
+                </div>
+                <div class="item"><text>{{item.trainUser|number}}</text></div>
+                <div class="item"><text>{{item.busUser|number}}</text></div>
+                <div class="item"><text>{{item.ytjUser|number}}</text></div>
+                <div class="item"><text>{{(item.trainUser+item.ytjUser+item.busUser)|number}}</text></div>
+            </div>
+        </div>
+
+        <div class="mt10">
+            <h2 class="title">{{ $t("equip.title") }}</h2>
+            <div class="row">
+                <div class="item"><text></text></div>
+                <div class="item"><text>{{ $t("Portal.train") }}</text></div>
+                <div class="item"><text>{{ $t("Portal.bus") }}</text></div>
+                <div class="item"><text>{{ $t("Portal.ytj") }}</text></div>
+                <div class="item"><text>{{ $t("Portal.total") }}</text></div>
+            </div>
+            <div v-for="(item,index) in device_all" :key="index" class="row">
+                <div class="item">
+                    <text v-if="index==0">{{ $t("equip.active") }}</text>
+                    <text v-if="index==1">{{ $t("equip.online") }}</text>
+                    <text v-if="index==2">{{ $t("equip.install") }}</text>
+                </div>
+                <div class="item"><text>{{item.trainUser}}</text></div>
+                <div class="item"><text>{{item.busUser}}</text></div>
+                <div class="item"><text>{{item.ytjUser}}</text></div>
+                <div class="item"><text>{{item.trainUser+item.ytjUser+item.busUser}}</text></div>
+            </div>
+        </div>
+
+        <div class="mt10">
+            <h2 class="title">{{ $t("wangfan.application") }}</h2>
+            <div class="row">
+                <div class="item"><text></text></div>
+                <div class="item"><text>{{ $t("wangfan.newU") }}</text></div>
+                <div class="item"><text>{{ $t("wangfan.active") }}</text></div>
+                <div class="item"><text>{{ $t("wangfan.total") }}</text></div>
+                <div class="item"><text>{{ $t("wangfan.duration") }}</text></div>
+            </div>
+            <div v-for="(item,index) in user_all" :key="index" class="row">
+                <div class="item"><text>{{item.date}}}</text></div>
+                <div class="item"><text>{{item.new|number}}</text></div>
+                <div class="item"><text>{{item.active|number}}</text></div>
+                <div class="item"><text>{{item.total|number}}</text></div>
+                <div class="item"><text>{{item.duration|minute}}</text></div>
+            </div>
+            <div class="row">
+                <div class="item"><text>{{ $t("wangfan.increase") }}</text></div>
+                <div class="item"><text>{{newAmp}}</text></div>
+                <div class="item"><text>{{activeAmp}}</text></div>
+                <div class="item"><text>{{totalAmp}}</text></div>
+                <div class="item"><text>{{durationAmp}}</text></div>
+            </div>
+        </div>
+
+        <footer class="v-explain">
+            <p>{{ $t("explain[0]") }}</p>
+            <p>{{ $t("explain[1]") }}</p>
+            <p>{{ $t("explain[2]") }}</p>
+            <p>{{ $t("explain[3]") }}</p>
+            <p>{{ $t("explain[4]") }}</p>
+            <p>{{ $t("explain[5]") }}</p>
+        </footer>
+        
+        <div class="v-language">
+            <select @change="lang()">
+                <option value="en">English</option>
+                <option selected="selected" value="cn">中文</option>
+            </select>
+        </div>
 	</article>
 </template>
 
-<style lang="sass">
-	@import "reset";
-
-	html,body{
-		overflow-x: hidden;
-		background-color: #EFF2F8;
-	}
-
-	.v-box{
-		width: 100%;
-		margin: 0 auto 20px;
-		text-align: center;
-		background-color: #fff;
-		box-sizing: border-box;
-		*{
-			box-sizing: border-box;
-		}
-		.thead{
-			background-color: #EFF2F9;
-		}
-		th,td{
-			width: 20%;
-			border-left: 1px solid #dadfea;
-			border-bottom: 1px solid #dadfea;
-			padding: 6px;
-		}
-		thead > tr:first-child > th{
-			border-top: 1px solid #dadfea;
-		}
-	}
-	#v-box .mt10{
-		margin-bottom: 10px;
-	}
-
+<style scope>
+    *{margin: 0; padding: 0;}
+    .mt10{
+        margin-bottom: 10px;
+    }
 	.v-time{
 		padding: 10px;
 		display: block;
 	}
-	.v-explain{
-		line-height: 24px;
-		padding: 0 10px;
-		text-align: justify;
+	.title{
+		height: 60px;
+        line-height: 60px;
+        text-align: center;
+		justify-content: center;
+		align-items: center;
+		border-top-width: 1px;
+		border-style: solid;
+		border-color: #dadfea;
 	}
-	.v-language{
-		padding: 10px;
+	.item{
+		flex: 1;
+		justify-content: center;
+		align-items: center;
+		border-width: 1px;
+		border-color: #dadfea;
+		border-style: solid;
+		margin-left: -1px;
+		margin-top: -1px;
 	}
-	.select-lang{
-		position: relative;
-	    float: right;
-	    width: 105px;
-	    height: 25px;
-	    line-height: 25px;
-	    > a{
-	    	display: block;
-	    	border: 1px solid #999ba4;
-		    font-size: 14px;
-		    text-align: center;
-		    box-sizing: border-box;
-		    background-color: #fff;
-	    }
-	    .caret{
-	    	display: inline-block;
-		    margin-left: 2px;
-		    width: 0;
-		    height: 0;
-		    vertical-align: middle;
-		    border-left: 4px solid transparent;
-		    border-right: 4px solid transparent;
-		    border-top: 4px solid #000;
-	    }
-	    > ul{
-	    	display: none;
-		    position: absolute;
-		    margin-top: -90px;
-	    	width: 105px;
-	    	border: 1px solid #999ba4;
-		    top: 100%;
-		    left: 0;
-		    z-index: 999;
-		    float: left;
-		    padding: 5px 0;
-		    font-size: 14px;
-		    text-align: left;
-		    list-style: none;
-		    background-color: #fff;
-		    background-clip: padding-box;
-		    box-sizing: border-box;
-		    a{
-		    	display: block;
-			    padding: 3px 20px;
-			    clear: both;
-			    font-weight: 400;
-			    line-height: 1.42857143;
-			    color: #363539;
-			    white-space: nowrap;
-			    box-sizing: border-box;
-			    &:hover{
-			    	color: #363539;
-			        text-decoration: none;
-			        background-color: #f5f5f5;
-			    }
-		    }
+	.row{
+		flex-direction: row;
+		height: 80px;
+	}
+    .v-language{
+        justify-content: flex-end;
+        align-items: flex-end;
+        margin: 10px;
+    }
 
-		    &.show{
-		    	display: block;
-		    }
-	    }
-	}
 </style>
 
 <script>
+
+const stream = weex.requireModule('stream');
 import VueI18n from "vue-i18n";
 import dataFormat from 'dataFormat';
 const Y_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/queryBIbizTDeviceUserDaily.action';
@@ -268,7 +181,6 @@ Vue.filter("minute",function (n){
 export default {
     data(){
     	return {
-	        showLanguage: false,
 	        now: Date.now(),
 	        today_detail: {},
 	        yesterday_all: [],
@@ -305,9 +217,14 @@ export default {
             return ((this.user_all[1][name]-this.user_all[2][name])/this.user_all[2][name]*100).toFixed(2)+'%';
         },
         get(){
-            fetch(Y_URL)
-                .then(response=>response.json())
-                .then(arr=>{
+            stream.fetch({
+                method: 'GET',
+                type: 'json',
+                url: Y_URL,
+                body: ''
+            },data=>{
+                if (data.ok) {
+                    let arr = data.data;
                     var yesterday_all = [{},{},{}];
                     arr.sort((a,b)=>a.userType-b.userType);
                     for (var i = 0; i < arr.length; i++) {
@@ -316,13 +233,17 @@ export default {
                         yesterday_all[i].ytjUser = arr[i].ytjUser - 0;
                     }
                     this.yesterday_all = yesterday_all;
-                })
-                .catch((e)=>{
-                    console.error(`error ${e}`)
-                });
-            fetch(T_URL)
-                .then(response=>response.json())
-                .then(arr=>{
+                }
+            });
+
+            stream.fetch({
+                method: 'GET',
+                type: 'json',
+                url: T_URL,
+                body: ''
+            },data=>{
+                if (data.ok) {
+                    let arr = data.data;
                     var today_detail = {
                         x_data: [],         // time
                         r_user: [],         // real_users
@@ -370,13 +291,17 @@ export default {
                     }
                     this.today_detail = today_detail;
                     this.today_all = today_all;
-                })
-                .catch((e)=>{
-                    console.error(`error ${e}`)
-                });
-            fetch(D_URL)
-                .then(response=>response.json())
-                .then(arr=>{
+                }
+            });
+
+            stream.fetch({
+                method: 'GET',
+                type: 'json',
+                url: D_URL,
+                body: ''
+            },data=>{
+                if (data.ok) {
+                    let arr = data.data;
                     var device_all = [{},{},{}];
                     for (var i = 0; i < arr.length; i+=3) {
                         for (var j = 0; j < 3; j++) {
@@ -400,24 +325,25 @@ export default {
                         }
                     }
                     this.device_all = device_all;
-                })
-                .catch((e)=>{
-                    console.error(`error ${e}`)
-                });
-            fetch(U_URL)
-                .then(response=>response.json())
-                .then(arr=>{
-                    var data = arr.result.data;
+                }
+            });
+
+            stream.fetch({
+                method: 'GET',
+                type: 'json',
+                url: U_URL,
+                body: ''
+            },data=>{
+                if (data.ok) {
+                    let arr = data.data.result.data;
                     var user_all = [];
-                    for(let name in data){
-                        let json = Object.assign({date:name},data[name]);
+                    for(let name in arr){
+                        let json = Object.assign({date:name},arr[name]);
                         user_all.push(json);
                     }
                     this.user_all = user_all.sort((a,b)=>this.format2Time(b.date)-this.format2Time(a.date)).slice(0,3);
-                })
-                .catch((e)=>{
-                    console.error(`error ${e}`)
-                })
+                }
+            });
         },
         format2Time(time){
             var y = time.substr(0,4),
@@ -431,8 +357,8 @@ export default {
             nowDate.setHours(h,m,s);
             return nowDate.getTime();
         },
-        lang(language){
-            this.showLanguage = false;
+        lang(){
+            let language = Vue.config.lang=='cn'?'en':'cn';
             Vue.config.lang = language;
         }
     }
