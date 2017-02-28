@@ -52,8 +52,8 @@
         "equip": {
             "title":        "Equipment installation statistics",
             "active":       "Device Active",
-            "online":       "Equipment Online",
-            "install":      "Equipment Installation"
+            "online":       "Equip Online",
+            "install":      "Equip Install"
         },
         "wangfan": {
             "application": "Wangfan Application Statistics",

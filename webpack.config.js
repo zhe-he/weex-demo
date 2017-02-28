@@ -18,7 +18,7 @@ var loaders = [
 		loader: 'postcss-loader',
 		options: {
 			plugins: [
-				autoprefixer({ browsers: ['last 9 versions'], cascade: false })
+				autoprefixer({ browsers: ['last 7 versions'], cascade: false })
 			]
 		}
 	}
@@ -52,8 +52,10 @@ function getBaseConfig () {
 						{
 							loader: '',
 							options: {
+								preserveWhitespace: false,
+								postcss: [require('autoprefixer')({browsers: ['last 7 versions']})],
 								loaders: {
-									'js': 'babel-loader?presets[]=es2015',
+									'js': 'babel-loader?presets[]=es2015'
 								}
 							}
 						}

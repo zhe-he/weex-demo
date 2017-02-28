@@ -13,9 +13,9 @@
 			</div>
 			<div v-for="(item,index) in today_all" :key="index" class="row">
 				<div class="item">
-					<text v-if="index==0">{{ $t("Portal.actual") }}</text>
-					<text v-if="index==1">{{ $t("Portal.connect") }}</text>
-					<text v-if="index==2">{{ $t("Portal.active") }}</text>
+					<text class="center" v-if="index==0">{{ $t("Portal.actual") }}</text>
+					<text class="center" v-if="index==1">{{ $t("Portal.connect") }}</text>
+					<text class="center" v-if="index==2">{{ $t("Portal.active") }}</text>
 				</div>
 				<div class="item"><text>{{item.trainUser}}</text></div>
 				<div class="item"><text>{{item.busUser}}</text></div>
@@ -35,9 +35,9 @@
             </div>
             <div v-for="(item,index) in yesterday_all" :key="index" class="row">
                 <div class="item">
-                    <text v-if="index==0">{{ $t("Portal.actual") }}</text>
-                    <text v-if="index==1">{{ $t("Portal.connect") }}</text>
-                    <text v-if="index==2">{{ $t("Portal.active") }}</text>
+                    <text class="center" v-if="index==0">{{ $t("Portal.actual") }}</text>
+                    <text class="center" v-if="index==1">{{ $t("Portal.connect") }}</text>
+                    <text class="center" v-if="index==2">{{ $t("Portal.active") }}</text>
                 </div>
                 <div class="item"><text>{{item.trainUser|number}}</text></div>
                 <div class="item"><text>{{item.busUser|number}}</text></div>
@@ -57,9 +57,9 @@
             </div>
             <div v-for="(item,index) in device_all" :key="index" class="row">
                 <div class="item">
-                    <text v-if="index==0">{{ $t("equip.active") }}</text>
-                    <text v-if="index==1">{{ $t("equip.online") }}</text>
-                    <text v-if="index==2">{{ $t("equip.install") }}</text>
+                    <text class="center" v-if="index==0">{{ $t("equip.active") }}</text>
+                    <text class="center" v-if="index==1">{{ $t("equip.online") }}</text>
+                    <text class="center" v-if="index==2">{{ $t("equip.install") }}</text>
                 </div>
                 <div class="item"><text>{{item.trainUser}}</text></div>
                 <div class="item"><text>{{item.busUser}}</text></div>
@@ -71,13 +71,13 @@
             <div class="title"><text>{{ $t("wangfan.application") }}</text></div>
             <div class="row">
                 <div class="item"><text></text></div>
-                <div class="item"><text>{{ $t("wangfan.newU") }}</text></div>
-                <div class="item"><text>{{ $t("wangfan.active") }}</text></div>
-                <div class="item"><text>{{ $t("wangfan.total") }}</text></div>
-                <div class="item"><text>{{ $t("wangfan.duration") }}</text></div>
+                <div class="item"><text class="center">{{ $t("wangfan.newU") }}</text></div>
+                <div class="item"><text class="center">{{ $t("wangfan.active") }}</text></div>
+                <div class="item"><text class="center">{{ $t("wangfan.total") }}</text></div>
+                <div class="item"><text class="center">{{ $t("wangfan.duration") }}</text></div>
             </div>
             <div v-for="(item,index) in user_all" :key="index" class="row">
-                <div class="item"><text>{{item.date}}</text></div>
+                <div class="item"><text class="center">{{item.date}}</text></div>
                 <div class="item"><text>{{item.new|number}}</text></div>
                 <div class="item"><text>{{item.active|number}}</text></div>
                 <div class="item"><text>{{item.total|number}}</text></div>
@@ -123,6 +123,7 @@
 		justify-content: center;
 		align-items: center;
 		border-top-width: 1px;
+        border-bottom-width: 1px;
 		border-style: solid;
 		border-color: #dadfea;
 	}
@@ -145,11 +146,14 @@
         align-items: flex-end;
         padding: 20px;
     }
+    .center{
+        text-align: center;
+    }
 
 </style>
 
 <script>
-
+const storage = weex.requireModule('storage');
 const stream = weex.requireModule('stream');
 const picker = weex.requireModule('picker'); // not Support Browser
 import VueI18n from "vue-i18n";
@@ -161,10 +165,14 @@ const U_URL = 'http://139.217.23.179:8080/metrics/talkingdata/users/daily';
 import locales from "./data/locales.json";
 import e_locales from "./data/echarts_locales.json";
 Vue.use(VueI18n);
-Vue.config.lang  = 'cn';
+Vue.config.lang = 'cn';
+storage.getItem('language',ev=>{
+    Vue.config.lang=(ev.data && ev.data != 'undefined')?ev.data:'cn';
+});
 Object.keys(locales).forEach(function (lang) {
     Vue.locale(lang, locales[lang]);
 });
+
 Vue.filter("format_time",function (str){
     return dataFormat(str,"YYYY-MM-DD hh:mm");
 });
@@ -230,6 +238,8 @@ export default {
                         yesterday_all[i].ytjUser = arr[i].ytjUser - 0;
                     }
                     this.yesterday_all = yesterday_all;
+                }else{
+                    console.error(data);
                 }
             });
 
@@ -269,7 +279,8 @@ export default {
                     }
                     
                     const LAST_DAY = dataFormat(Date.now()-1000*3600*24,"YYYYMMDD");
-                    for(let json of arr){
+                    for (var i = 0; i < arr.length; i++) {
+                        let json = arr[i];
                         if (json.dayId==LAST_DAY) {
                             json.timeId = '\u6628'+json.timeId;
                         }
@@ -288,6 +299,8 @@ export default {
                     }
                     this.today_detail = today_detail;
                     this.today_all = today_all;
+                }else{
+                    console.error(data);
                 }
             });
 
@@ -322,6 +335,8 @@ export default {
                         }
                     }
                     this.device_all = device_all;
+                }else{
+                    console.error(data);
                 }
             });
 
@@ -339,6 +354,8 @@ export default {
                         user_all.push(json);
                     }
                     this.user_all = user_all.sort((a,b)=>this.format2Time(b.date)-this.format2Time(a.date)).slice(0,3);
+                }else{
+                    console.error(data);
                 }
             });
         },
@@ -362,6 +379,7 @@ export default {
             },ret=>{
                 if (ret.result=='success') {
                     Vue.config.lang = ret.data==0?'en':'cn';
+                    stream.setItem('language',Vue.config.lang);
                 }
             });
         }
