@@ -1,15 +1,15 @@
 <template>
-	<scroller>
+	<scroller class="bgcolor">
 		<div class="v-time"><text>{{ $t("vtime") }}: {{now | format_time}}</text></div>
 
-		<div class="mt10">
-			<div class="title"><text>{{ $t("Portal.hourly") }}</text></div>
+		<div class="mt10 color_w">
+			<div class="title"><text class="bolder">{{ $t("Portal.hourly") }}</text></div>
 			<div class="row">
 				<div class="item"><text></text></div>
-				<div class="item"><text>{{ $t("Portal.train") }}</text></div>
-				<div class="item"><text>{{ $t("Portal.bus") }}</text></div>
-				<div class="item"><text>{{ $t("Portal.ytj") }}</text></div>
-				<div class="item"><text>{{ $t("Portal.total") }}</text></div>
+				<div class="item"><text class="bolder">{{ $t("Portal.train") }}</text></div>
+				<div class="item"><text class="bolder">{{ $t("Portal.bus") }}</text></div>
+				<div class="item"><text class="bolder">{{ $t("Portal.ytj") }}</text></div>
+				<div class="item"><text class="bolder">{{ $t("Portal.total") }}</text></div>
 			</div>
 			<div v-for="(item,index) in today_all" :key="index" class="row">
 				<div class="item">
@@ -23,15 +23,17 @@
 				<div class="item"><text>{{item.trainUser+item.ytjUser+item.busUser}}</text></div>
 			</div>
 		</div>
+        
+        <web ref="webview" :src="url" :class="['webview',isBrowser?'disH':'']"></web>
 
-        <div class="mt10">
-            <div class="title"><text>{{ $t("Portal.yesterday") }}</text></div>
+        <div class="mt10 color_w">
+            <div class="title"><text class="bolder">{{ $t("Portal.yesterday") }}</text></div>
             <div class="row">
                 <div class="item"><text></text></div>
-                <div class="item"><text>{{ $t("Portal.train") }}</text></div>
-                <div class="item"><text>{{ $t("Portal.bus") }}</text></div>
-                <div class="item"><text>{{ $t("Portal.ytj") }}</text></div>
-                <div class="item"><text>{{ $t("Portal.total") }}</text></div>
+                <div class="item"><text class="bolder">{{ $t("Portal.train") }}</text></div>
+                <div class="item"><text class="bolder">{{ $t("Portal.bus") }}</text></div>
+                <div class="item"><text class="bolder">{{ $t("Portal.ytj") }}</text></div>
+                <div class="item"><text class="bolder">{{ $t("Portal.total") }}</text></div>
             </div>
             <div v-for="(item,index) in yesterday_all" :key="index" class="row">
                 <div class="item">
@@ -46,14 +48,14 @@
             </div>
         </div>
 
-        <div class="mt10">
-            <div class="title"><text>{{ $t("equip.title") }}</text></div>
+        <div class="mt10 color_w">
+            <div class="title"><text class="bolder">{{ $t("equip.title") }}</text></div>
             <div class="row">
                 <div class="item"><text></text></div>
-                <div class="item"><text>{{ $t("Portal.train") }}</text></div>
-                <div class="item"><text>{{ $t("Portal.bus") }}</text></div>
-                <div class="item"><text>{{ $t("Portal.ytj") }}</text></div>
-                <div class="item"><text>{{ $t("Portal.total") }}</text></div>
+                <div class="item"><text class="bolder">{{ $t("Portal.train") }}</text></div>
+                <div class="item"><text class="bolder">{{ $t("Portal.bus") }}</text></div>
+                <div class="item"><text class="bolder">{{ $t("Portal.ytj") }}</text></div>
+                <div class="item"><text class="bolder">{{ $t("Portal.total") }}</text></div>
             </div>
             <div v-for="(item,index) in device_all" :key="index" class="row">
                 <div class="item">
@@ -67,14 +69,14 @@
                 <div class="item"><text>{{item.trainUser+item.ytjUser+item.busUser}}</text></div>
             </div>
         </div>
-        <div>
-            <div class="title"><text>{{ $t("wangfan.application") }}</text></div>
+        <div class="color_w">
+            <div class="title"><text class="bolder">{{ $t("wangfan.application") }}</text></div>
             <div class="row">
                 <div class="item"><text></text></div>
-                <div class="item"><text class="center">{{ $t("wangfan.newU") }}</text></div>
-                <div class="item"><text class="center">{{ $t("wangfan.active") }}</text></div>
-                <div class="item"><text class="center">{{ $t("wangfan.total") }}</text></div>
-                <div class="item"><text class="center">{{ $t("wangfan.duration") }}</text></div>
+                <div class="item"><text class="center bolder">{{ $t("wangfan.newU") }}</text></div>
+                <div class="item"><text class="center bolder">{{ $t("wangfan.active") }}</text></div>
+                <div class="item"><text class="center bolder">{{ $t("wangfan.total") }}</text></div>
+                <div class="item"><text class="center bolder">{{ $t("wangfan.duration") }}</text></div>
             </div>
             <div v-for="(item,index) in user_all" :key="index" class="row">
                 <div class="item"><text class="center">{{item.date}}</text></div>
@@ -107,6 +109,12 @@
 
 <style scope>
     *{margin: 0; padding: 0;}
+    .bgcolor{
+        background-color: #eff2f8;
+    }
+    .color_w{
+        background-color: #fff;
+    }
     .mt10{
         margin-bottom: 20px;
     }
@@ -149,13 +157,23 @@
     .center{
         text-align: center;
     }
-
+    .bolder{
+        font-weight: bold;
+    }
+    .webview {
+        width: 750px;
+        height: 700px;
+        margin-bottom: 20px;
+    }
+    .disH{
+        height: 380px;
+    }
 </style>
 
 <script>
 const storage = weex.requireModule('storage');
 const stream = weex.requireModule('stream');
-const picker = weex.requireModule('picker'); // not Support Browser
+const picker = weex.requireModule('picker');
 import VueI18n from "vue-i18n";
 import dataFormat from 'dataFormat';
 const Y_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/queryBIbizTDeviceUserDaily.action';
@@ -186,6 +204,7 @@ Vue.filter("minute",function (n){
 export default {
     data(){
     	return {
+            isBrowser: typeof window=='object',
 	        now: Date.now(),
 	        today_detail: {},
 	        yesterday_all: [],
@@ -195,6 +214,10 @@ export default {
         }
     },
     computed: {
+        url(){
+            let str = this.isBrowser?'./dist/':'./';
+            return `${str}v-echarts.html#${Vue.config.lang}`;
+        },
         newAmp(){
             return this.countAmp("new");
         },
@@ -373,15 +396,20 @@ export default {
         },
         lang(){
             let index = Vue.config.lang=='en'?0:1;
-            picker.pick({
-                index: index,
-                items: ['English','中文']
-            },ret=>{
-                if (ret.result=='success') {
-                    Vue.config.lang = ret.data==0?'en':'cn';
-                    stream.setItem('language',Vue.config.lang);
-                }
-            });
+            if (this.isBrowser) {
+                console.warn('only app support,play use weex');
+            }else{
+                picker.pick({
+                    index: index,
+                    items: ['English','中文']
+                },ret=>{
+                    if (ret.result=='success') {
+                        Vue.config.lang = ret.data==0?'en':'cn';
+                        stream.setItem('language',Vue.config.lang);
+                    }
+                });
+            }
+            
         }
     }
 }

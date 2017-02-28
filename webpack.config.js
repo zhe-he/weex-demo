@@ -9,8 +9,7 @@ const bannerPlugin = new webpack.BannerPlugin(
 	{ raw: true,banner: '// { "framework": "Vue" }\n' }
 );
 const ASSETS = 'dist'; // 输出目录名
-var commonJs = ['whatwg-fetch'];
-commonJs = [];
+var commonJs = ['whatwg-fetch','babel-polyfill'];
 var loaders = [
 	{loader: 'style-loader'},
 	{loader: 'css-loader'},
@@ -23,11 +22,19 @@ var loaders = [
 		}
 	}
 ];
-function getBaseConfig () {
+var entry = {
+	app: './app.js',
+	'v-echarts': commonJs.concat(['./src/page/v-echarts.js']),
+};
+function getBaseConfig (notArr=[]) {
+	let entryJson = {};
+	Object.keys(entry).forEach(function (name) {
+	    if (notArr.indexOf(name) == -1) {
+	    	entryJson[name] = entry[name];
+	    }
+	});
 	return {
-		entry: {
-			app: commonJs.concat(['./app.js']),
-		},
+		entry: entryJson,
 		output: {
 			// publicPath: '',
 			path: path.resolve(__dirname, ASSETS),
@@ -136,18 +143,18 @@ function getBaseConfig () {
 			],
 			extensions: ['.js', '.vue'],
 			alias: {
-				"dataFormat":     "src/modules/dataFormat.js",
+				"dataFormat":     "src/modules/dataFormat.js"
 			}
 		}
 	}
 }
 
-var webConfig = getBaseConfig()
-webConfig.output.filename = '[name].web.js'
+var webConfig = getBaseConfig();
+webConfig.output.filename = '[name].web.js';
 webConfig.module.rules[0].use[0].loader = 'vue-loader';
 
-var weexConfig = getBaseConfig()
-weexConfig.output.filename = '[name].weex.js'
+var weexConfig = getBaseConfig(['v-echarts']);
+weexConfig.output.filename = '[name].weex.js';
 weexConfig.module.rules[0].use[0].loader = 'weex-loader';
 
 module.exports = [webConfig, weexConfig]
