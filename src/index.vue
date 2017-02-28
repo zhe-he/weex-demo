@@ -1,9 +1,9 @@
 <template>
-	<article>
-		<time class="v-time">{{ $t("vtime") }}: {{now | format_time}}</time>
+	<scroller>
+		<div class="v-time"><text>{{ $t("vtime") }}: {{now | format_time}}</text></div>
 
 		<div class="mt10">
-			<h2 class="title">{{ $t("Portal.hourly") }}</h2>
+			<div class="title"><text>{{ $t("Portal.hourly") }}</text></div>
 			<div class="row">
 				<div class="item"><text></text></div>
 				<div class="item"><text>{{ $t("Portal.train") }}</text></div>
@@ -25,7 +25,7 @@
 		</div>
 
         <div class="mt10">
-            <h2 class="title">{{ $t("Portal.yesterday") }}</h2>
+            <div class="title"><text>{{ $t("Portal.yesterday") }}</text></div>
             <div class="row">
                 <div class="item"><text></text></div>
                 <div class="item"><text>{{ $t("Portal.train") }}</text></div>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="mt10">
-            <h2 class="title">{{ $t("equip.title") }}</h2>
+            <div class="title"><text>{{ $t("equip.title") }}</text></div>
             <div class="row">
                 <div class="item"><text></text></div>
                 <div class="item"><text>{{ $t("Portal.train") }}</text></div>
@@ -67,9 +67,8 @@
                 <div class="item"><text>{{item.trainUser+item.ytjUser+item.busUser}}</text></div>
             </div>
         </div>
-
-        <div class="mt10">
-            <h2 class="title">{{ $t("wangfan.application") }}</h2>
+        <div>
+            <div class="title"><text>{{ $t("wangfan.application") }}</text></div>
             <div class="row">
                 <div class="item"><text></text></div>
                 <div class="item"><text>{{ $t("wangfan.newU") }}</text></div>
@@ -78,7 +77,7 @@
                 <div class="item"><text>{{ $t("wangfan.duration") }}</text></div>
             </div>
             <div v-for="(item,index) in user_all" :key="index" class="row">
-                <div class="item"><text>{{item.date}}}</text></div>
+                <div class="item"><text>{{item.date}}</text></div>
                 <div class="item"><text>{{item.new|number}}</text></div>
                 <div class="item"><text>{{item.active|number}}</text></div>
                 <div class="item"><text>{{item.total|number}}</text></div>
@@ -93,32 +92,29 @@
             </div>
         </div>
 
-        <footer class="v-explain">
-            <p>{{ $t("explain[0]") }}</p>
-            <p>{{ $t("explain[1]") }}</p>
-            <p>{{ $t("explain[2]") }}</p>
-            <p>{{ $t("explain[3]") }}</p>
-            <p>{{ $t("explain[4]") }}</p>
-            <p>{{ $t("explain[5]") }}</p>
-        </footer>
-        
-        <div class="v-language">
-            <select @change="lang()">
-                <option value="en">English</option>
-                <option selected="selected" value="cn">中文</option>
-            </select>
+        <div class="p10">
+            <text>{{ $t("explain[0]") }}</text>
+            <text>{{ $t("explain[1]") }}</text>
+            <text>{{ $t("explain[2]") }}</text>
+            <text>{{ $t("explain[3]") }}</text>
+            <text>{{ $t("explain[4]") }}</text>
+            <text>{{ $t("explain[5]") }}</text>
         </div>
-	</article>
+        
+        <div class="v-language" @click="lang()"><text>{{ $t("language") }}</text></div>
+	</scroller>
 </template>
 
 <style scope>
     *{margin: 0; padding: 0;}
     .mt10{
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    .p10{
+        padding: 20px;
     }
 	.v-time{
-		padding: 10px;
-		display: block;
+		padding: 20px;
 	}
 	.title{
 		height: 60px;
@@ -147,7 +143,7 @@
     .v-language{
         justify-content: flex-end;
         align-items: flex-end;
-        margin: 10px;
+        padding: 20px;
     }
 
 </style>
@@ -155,6 +151,7 @@
 <script>
 
 const stream = weex.requireModule('stream');
+const picker = weex.requireModule('picker'); // not Support Browser
 import VueI18n from "vue-i18n";
 import dataFormat from 'dataFormat';
 const Y_URL = 'http://139.217.29.222:6060/largeScreen/portalapp/queryBIbizTDeviceUserDaily.action';
@@ -358,8 +355,15 @@ export default {
             return nowDate.getTime();
         },
         lang(){
-            let language = Vue.config.lang=='cn'?'en':'cn';
-            Vue.config.lang = language;
+            let index = Vue.config.lang=='en'?0:1;
+            picker.pick({
+                index: index,
+                items: ['English','中文']
+            },ret=>{
+                if (ret.result=='success') {
+                    Vue.config.lang = ret.data==0?'en':'cn';
+                }
+            });
         }
     }
 }
